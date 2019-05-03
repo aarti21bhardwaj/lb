@@ -1,0 +1,31 @@
+<!-- <div class="spinner" *ngIf="spinnerEnabled"></div> -->
+<div >
+  <ol class="breadcrumb">
+    <li>
+      <div class="list-group">
+        <div class="list-group-item-action flex-column align-items-start">
+          <h5 class="mb-1">
+            <strong>DESIRED OUTCOMES</strong>
+          </h5>
+        </div>
+      </div>
+      <!-- .list-group ends here  -->
+    </li>
+  </ol>  
+  <div class = "card">
+    <div class = "card-header">
+      <strong>DESIRED OUTCOMES</strong>
+    </div>
+    <div class = "card-body">
+      <app-add-unit-specific-component [courseId]= courseId [unitId]= unitId [categoryId]= enduringUnderstandingsId
+        [commonContents]= understandings [unitSpecificContents]= enduringUnderstandings [showColumnTable] = showColumnTable>
+      </app-add-unit-specific-component>
+     <app-add-unit-specific-component [courseId]= courseId [unitId]= unitId [categoryId]= essentialQuestionsId 
+      [commonContents]= questions [unitSpecificContents]= essentialQuestions [showColumnTable] = showColumnTable>
+     </app-add-unit-specific-component> 
+     <app-unit-standards [courseId]= courseId [unitId]= unitId [title]= "'Standards'" [treeTitle] = "'IskStandards'" ></app-unit-standards>
+    <app-unit-impacts [courseId]= courseId [unitId]= unitId [title]="'Educational Aims'" [treeTitle]="' '"></app-unit-impacts>
+    </div>
+  </div>
+</div>
+<!-- .card ends here-->

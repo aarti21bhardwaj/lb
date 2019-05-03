@@ -1,0 +1,77 @@
+<div *ngIf = "unitId && courseId">
+  <ol class="breadcrumb">
+    <li>
+      <div class="list-group">
+        <div class="list-group-item-action flex-column align-items-start">
+          <h5 class="mb-1">
+            <strong>HOW MIGHT WE LEARN ?</strong>
+          </h5>
+        </div>
+      </div>
+      <!-- .list-group ends here  -->
+    </li>
+  </ol>
+  <div class = "card">
+    <div class  = "card-header">
+      <strong>How might we learn ?</strong>
+    </div>
+    <div class = "card-body">
+        <app-sub-assessments [unitId]= unitId [courseId]= courseId [assessmentTypeId]="'4'" [assessmentSubtypeId]="1" [title]="'Connections Tuning In'"></app-sub-assessments>
+        <app-sub-assessments [unitId]= unitId [courseId]= courseId [assessmentTypeId]="'4'" [assessmentSubtypeId]="2" [title]="'Invitations/Finding Out'"></app-sub-assessments>
+        <app-sub-assessments [unitId]= unitId [courseId]= courseId [assessmentTypeId]="'4'" [assessmentSubtypeId]="3" [title]="'Tension/Sorting Out'"></app-sub-assessments>
+        <app-sub-assessments [unitId]= unitId [courseId]= courseId [assessmentTypeId]="'4'" [assessmentSubtypeId]="4" [title]="'Investigations/Finding Out'"></app-sub-assessments>
+        <app-sub-assessments [unitId]= unitId [courseId]= courseId [assessmentTypeId]="'4'" [assessmentSubtypeId]="5" [title]="'Demonstration/Going Further'"></app-sub-assessments>
+        <app-sub-assessments [unitId]= unitId [courseId]= courseId [assessmentTypeId]="'4'" [assessmentSubtypeId]="6" [title]="'Revision/Sorting Out'"></app-sub-assessments>
+        <app-sub-assessments [unitId]= unitId [courseId]= courseId [assessmentTypeId]="'4'" [assessmentSubtypeId]="7" [title]="'Representation/Drawing Conclusions'"></app-sub-assessments>
+        <app-sub-assessments [unitId]= unitId [courseId]= courseId [assessmentTypeId]="'4'" [assessmentSubtypeId]="8" [title]="'Valuation/Drawing Calculations'"></app-sub-assessments>
+        <app-sub-assessments [unitId]= unitId [courseId]= courseId [assessmentTypeId]="'4'" [assessmentSubtypeId]="9" [title]="'Action/Taking Action'"></app-sub-assessments>
+      <!-- <accordion>
+        <accordion-group #group>
+          <div accordion-heading class="clearfix">
+            <strong>Connections Tuning In</strong>
+          </div>
+        </accordion-group>
+        <accordion-group #group>
+          <div accordion-heading class="clearfix">
+            <strong>Invitations/Finding Out</strong>
+          </div>
+        </accordion-group>
+        <accordion-group #group>
+          <div accordion-heading class="clearfix">
+            <strong>Tension/Sorting Out</strong>
+          </div>
+        </accordion-group>
+        <accordion-group #group>
+          <div accordion-heading class="clearfix">
+            <strong>Investigations/Finding Out</strong>
+          </div>
+        </accordion-group>
+        <accordion-group #group>
+          <div accordion-heading class="clearfix">
+            <strong>Demonstration/Going Further</strong>
+          </div>
+        </accordion-group>
+        <accordion-group #group>
+          <div accordion-heading class="clearfix">
+            <strong>Revision/Sorting Out</strong>
+          </div>
+        </accordion-group>
+        <accordion-group #group>
+          <div accordion-heading class="clearfix">
+            <strong>Representation/Drawing Conclusions</strong>
+          </div>
+        </accordion-group>
+        <accordion-group #group>
+          <div accordion-heading class="clearfix">
+            <strong>Valuation/Drawing Calculations</strong>
+          </div>
+        </accordion-group>
+        <accordion-group #group>
+          <div accordion-heading class="clearfix">
+            <strong>Action/Taking Action</strong>
+          </div>
+        </accordion-group>
+      </accordion> -->
+    </div>
+  </div>
+ </div> 

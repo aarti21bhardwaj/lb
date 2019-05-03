@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="app-body">
+    <div class="col-sm-2">
+      <div class="sidebar">
+        <nav class="sidebar-nav">
+          <ul class="nav">
+            <li class="nav-title">
+              My Courses
+            </li>
+            <li>
+              <div class="col-sm-12" style="padding-bottom:10px">
+                <input class="form-control" type="text" name="title" [(ngModel)]="filter_name" placeholder="Enter course name">
+              </div>
+            </li>
+            <li class="nav-item nav-dropdown" routerLinkActive="open" *ngFor="let course of courses | filter:['name', filter_name]" appNavDropdown>
+              <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle> {{course.name}}-Grade {{course.grade.name}}</a>
+              <ul class="nav-dropdown-items">
+                <li class="nav-item" *ngFor="let section of course.sections">
+                  <a class="nav-link" (click)="sectionSelected(section.id)">{{section.name}} {{section.teacher ? '| '+section.teacher.full_name : ''}}</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <div class="col-sm-10 mb-4">
+      <div *ngIf="!selected_section_id" style="background-color:white; height:93vh; max-width:100%;">
+        <div class="container-fluid text-center" style="padding-top: 320px;">
+          <h1>
+            Select a section from the course list!
+          </h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Main content -->
+  <!-- <router-outlet></router-outlet> -->
+</div>

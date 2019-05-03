@@ -1,0 +1,58 @@
+<accordion *ngIf = "commonContent && objectName == 'assessment'">
+  <accordion-group #group>
+    <div accordion-heading class="clearfix">
+      <strong>Digital Strategies</strong>
+    </div>
+    <div class="form-group row">
+    <div class="col-md-12">
+      <label class="form-control-label" for="text-input">Did you use any digital strategies ?</label>
+      <span>
+        <label class="radio-inline" for="inline-radio1">
+          <input id="inline-radio1" [(ngModel)]="isDigitalToolUsed" name="inline-radios" (click)="IsStrategyUsed(true)" type="radio"
+            [value]="true">Yes
+        </label>
+        <label class="radio-inline" for="inline-radio2">
+          <input id="inline-radio2" [(ngModel)]="isDigitalToolUsed" name="inline-radios" (click)="IsStrategyUsed(false)" type="radio"
+            [value]="false">No
+        </label>
+      </span>
+    </div>
+    <!-- Hidden digital strategy -->
+    <div class="col-md-12" *ngIf="commonContent && isDigitalToolUsed" [hidden]= true>
+      <button *ngIf="commonContent.content_values && isCollaped " class="pull-right btn btn-primary" (click)="expandAll(tree.treeModel)">Expand
+        All</button>
+      <button *ngIf="commonContent.content_values && !isCollaped " class="pull-right btn btn-primary" (click)="collapseAll(tree.treeModel)">Collapse
+        All
+      </button>
+      <tree-root #tree [nodes]="commonContent.content_values">
+        <ng-template #treeNodeTemplate let-node="node" let-index="index">
+          <input *ngIf="node.data.is_selectable" id="achievements_{{node.data.id}}" (change)="checkedCommonContent($event, node, 'commonContent')"
+            type="checkbox" [indeterminate]="node.data.indeterminate" [checked]="checkCommonContent(node.data) ">{{node.data.text}}
+        </ng-template>
+      </tree-root>
+    </div>
+  </div>
+  </accordion-group>
+</accordion>
+
+<ng-container *ngIf = "objectName == 'evidence'&& commonContent && commonContent.content_values">
+  <span>
+    <label class="radio-inline" for="inline-radio1">
+      <input id="inline-radio1" [(ngModel)]="isDigitalToolUsed" name="inline-radios" (click)="IsStrategyUsed(true)" type="radio"
+        [value]="true">Yes
+    </label>
+    <label class="radio-inline" for="inline-radio2">
+      <input id="inline-radio2" [(ngModel)]="isDigitalToolUsed" name="inline-radios" (click)="IsStrategyUsed(false)" type="radio"
+        [value]="false">No
+    </label>
+  </span>
+  <!-- Hidden digital strategy -->
+  <ng-container *ngIf = "isDigitalToolUsed" >
+    <tree-root #tree [nodes]="commonContent.content_values" [hidden]= true>
+      <ng-template #treeNodeTemplate let-node="node" let-index="index">
+        <input *ngIf="node.data.is_selectable" id="achievements_{{node.data.id}}" (change)="checkedCommonContent($event, node, 'commonContent')"
+          type="checkbox" [indeterminate]="node.data.indeterminate" [checked]="checkCommonContent(node.data) ">{{node.data.text}}
+      </ng-template>
+    </tree-root>
+  </ng-container>
+</ng-container>

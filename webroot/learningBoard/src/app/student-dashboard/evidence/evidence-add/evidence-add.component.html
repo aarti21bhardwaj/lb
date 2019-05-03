@@ -1,0 +1,140 @@
+<div class="app-body">
+
+  <div class="sidebar">
+  
+  </div>
+
+  <!-- spinner -->
+  <div class="spinner" *ngIf="spinnerEnabled"></div>
+  
+  <div class="main" [hidden]="spinnerEnabled">
+    <div class="container-fluid">
+      <div class="animated fadeIn">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-header">
+                <strong>Add Evidence</strong>
+              </div>
+              <div class="card-body" *ngIf="studentInfo && studentInfo.campusSettings">
+                <form class="form-horizontal" enctype="multipart/form-data" #evidenceForm="ngForm">
+                  <div class="form-group row">
+                    <label class="col-md-3 form-control-label" for="title">Title</label>
+                    <div class="col-md-9">
+                      <input class="form-control" id="title" name="title" placeholder="Title" type="text" [(ngModel)]="evidence.title">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-3 form-control-label" for="description">Description</label>
+                    <div class="col-md-9">
+                      <textarea class="form-control" id="description" name="description" placeholder="Description..." rows="3" [(ngModel)]="evidence.description"></textarea>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-3 form-control-label" for="file-input">File input</label>
+                    <div class="col-md-9">
+                      <label class="radio-inline" for="link">
+                        <input id="link" name="link" [(ngModel)]="fileType" type="radio" value="link" (click) = "linkchecked('link')">Link
+                      </label>
+                      <label class="file" for="file">
+                        <input id="file" name="file" [(ngModel)]="fileType" type="radio" value="file" (click) = "linkchecked('file')"> File
+                      </label>
+                      <ng-container *ngIf="fileType == 'link'" class="form-group row">
+                        <input class="form-control" [(ngModel)]="evidence.url" id="url" name="url" placeholder="Enter link" type="text">
+                      </ng-container>
+                      <ng-container *ngIf="fileType == 'file'" class="form-group row">
+                        <input  id="file-input" name="file-input" type="file" (change)="handleFileInput('general',$event.target.files)">
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div class="form-group row" *ngIf="studentInfo.campusSettings['Evidence reflection'].value == 'Description'">
+                    <label class="col-md-3 form-control-label" for="reflection_description">Reflection</label>
+                    <div class="col-md-9">
+                      <textarea class="form-control" id="reflection_description" placeholder="Description..." rows="3" [(ngModel)]="evidence.reflection_description" name="reflectionDescription"></textarea>
+                    </div>
+                  </div>
+                  <div class="form-group row" *ngIf="studentInfo.campusSettings['Evidence reflection'].value == 'File'">
+                    <label class="col-md-3 form-control-label" for="reflection-file">Reflection File</label>
+                    <div class="col-md-9">
+                      <input id="reflection-file" name="reflection-file" type="file" (change)="handleFileInput('reflection',$event.target.files)">
+                    </div>
+                  </div>
+                  <div class="form-group row" *ngIf="studentInfo.campusSettings['Multiple Courses per Evidence'].value == 0">
+                    <label class="col-md-3 form-control-label">Evidence Course</label>
+                    <div class="col-md-9" *ngIf="studentInfo && studentInfo.courseData && studentInfo.courseData.length !== 0">
+                      <label class="radio-inline" for="inline-radio{{i+1}}" *ngFor="let course of studentInfo.courseData; let i = index">
+                        <input id="inline-radio{{i+1}}" name="inline-radios" type="radio" value="{{course._matchingData.Sections.id}}" [(ngModel)]="evidence.course"> {{ course.name}}
+                      </label>
+                    </div>
+                  </div>
+                  <div class="form-group row" *ngIf="studentInfo.campusSettings['Multiple Courses per Evidence'].value == 1">
+                    <label class="col-md-3 form-control-label">Evidence Courses</label>
+                    <div class="col-md-9">
+                      <label class="checkbox-inline" for="inline-checkbox{{course.id}}" *ngFor="let course of studentInfo.courseData; let i = index">
+                        <input id="inline-checkbox{{course.id}}" name="inline-checkbox{{course.id}}" type="checkbox" value="1" [ngModel]="multiCourseModel[course._matchingData.Sections.id]" (ngModelChange)="handleCourseCheckboxes(course._matchingData.Sections.id)">
+                        {{course.name}}
+                      </label>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-3 form-control-label">Evidence Context</label>
+                    <div *ngIf = "contextData && contextData.length >0" class="col-md-9">
+                      <ng-select [multiple]="true" [items]="contextData" [disabled]="isDisabled" (data)="refreshValue($event)"
+                        (selected)="selected($event)" (removed)="removed($event)" placeholder="Select Contexts"></ng-select>
+                    </div>
+                  </div>
+      
+                  <div class="form-group row">
+                    <label class="col-md-3 form-control-label" for="text-input">Did you use any digital strategies ?</label>
+                    <div class = "col-md-9">
+                      <label class="radio-inline" for="strategy-used">
+                        <input id="strategy-used"  name="strategy-used" [(ngModel)]="isDigitalToolUsed" (click)="IsStrategyUsed(true)" type="radio"
+                          [value]="true">Yes
+                      </label>
+                      <label class="strategy-notused" for="strategy-notused">
+                        <input id="strategy-notused" name="strategy-notused" [(ngModel)]="isDigitalToolUsed" (click)="IsStrategyUsed(false)" type="radio"
+                          [value]="false">No
+                      </label>
+                    </div>
+                  </div>
+                  <!-- Hidden digital tools -->
+                  <div class="form-group row" *ngIf="digitalStrategies && isDigitalToolUsed" [hidden]= true>
+                    <div class="col-md-3">
+                    </div>
+                    <div class ="col-md-9">
+                      <tree-root #tree [nodes]="digitalStrategies.content_values">
+                        <ng-template #treeNodeTemplate let-node="node" let-index="index">
+                          <input *ngIf="node.data.is_selectable" id="achievements_{{node.data.id}}" (change)="checkedCommonContent($event, node, 'commonContent')"
+                            type="checkbox" [indeterminate]="node.data.indeterminate">{{node.data.text}}
+                        </ng-template>
+                      </tree-root>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="card-footer text-center">
+                <!-- <button class="btn btn-sm btn-primary" *ngIf="!savedData" type="submit" (click)="addEvidence(); impactModal.show();"> Submit</button> -->
+                <button class="btn btn-sm btn-primary" *ngIf="!savedData" type="submit" [disabled]="submitDisableCheck()" (click)="addEvidence(); openModal(impactModal, 0);"> Submit</button>
+                <button class="btn btn-sm btn-primary" *ngIf="savedData" type="submit" (click)="openModal(impactModal, 1)"> Add Impacts</button>
+                <button class="btn btn-sm btn-danger" type="button" (click)="goBack()"> {{ savedData ? 'Done' : 'Back'}}</button>
+              </div>
+            </div>
+          </div>          
+        </div>        
+      </div>      
+    </div>    
+  </div>
+
+</div>
+
+<ng-template #impactModal>
+  <div class="modal-header">
+    <strong class="modal-title pull-left">Add Impact</strong>
+    <button type="button" class="close pull-right" (click)="modalRef.hide()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-impacts-add-tree *ngIf = "courseIds" [courseIds]=courseIds [evidenceId]=savedData.id [title]="'Evidence Impacts'" [treeTitle]="' '" [studentOrTeacher]="'student'"></app-impacts-add-tree>
+  </div>
+</ng-template>

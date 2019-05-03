@@ -1,0 +1,107 @@
+<div *ngIf="unitId && courseId">
+  <ol class="breadcrumb">
+    <li>
+      <div class="list-group">
+        <div class="list-group-item-action flex-column align-items-start">
+          <h5 class="mb-1">
+            <strong>WHAT IS OUR PURPOSE</strong>
+          </h5>
+        </div>
+      </div>
+      <!-- .list-group ends here  -->
+    </li>
+  </ol>
+  <div class="card">
+    <div class="card-header">
+      <strong>What is our purpose?</strong>
+    </div>
+    <div *ngIf = "centralIdeaId" class="card-body">
+      <div class = "card">
+        <div class = "card-header">
+          <strong>Central Idea</strong>
+        </div>
+        <div class = "card-body">
+          <div class="form-group row">
+            <div class="col-md-12">
+              <label>Central Idea</label>
+              <div id="froalaInput" name="froalaInput" [froalaEditor]="editoroptions" [(froalaModel)]="centralIdeaDes"></div>
+              <input id="hiddenInput" name="hiddenInput" type="hidden" required [(ngModel)]="centralIdeaDes" />
+            </div>
+          </div>
+        </div>
+        <div class = "card-footer">
+          <button *ngIf = "showAddCentral" class="btn btn-primary pull-right customdisable" (click)="addSpecificContent('idea')">Save</button>
+          <button *ngIf = "showEditCentral" class="btn btn-primary pull-right customdisable" (click)="editSpecificContent('idea')">Save</button>
+        </div>
+      </div>
+      
+      <div *ngIf = "keyConcepts" class = "card">
+        <div class = "card-header">
+          <strong>Key Concepts</strong>
+        </div>
+        <div class = "card-body">
+          <div class="form-group row">
+            <div class="col-md-12">
+              <label class="form-control-label" for="select">Key Concepts</label>
+              <div class="checkbox" *ngFor="let concept of keyConcepts.content_values; let i = index;">
+                <label for="concept{{concept.id}}">
+                  <input id="concept{{concept.id}}" name="concept{{concept.id}}" [value]="concept.id" type="checkbox" (change)="checked($event, concept.id, 'concept')"
+                    [checked]="checkSelectedNode(concept, 'concept')"> {{concept.text}}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> <!-- Key concepts card ends here -->
+      <div class = "card">
+        <div class = "card-header">
+          <strong>Related Concepts</strong>
+        </div>
+        <div class = "card-body">
+          <div class="form-group row">
+            <div class="col-md-12">
+              <label>Related Concepts</label>
+              <div id="froalaInput" name="froalaInput" [froalaEditor]="editoroptions" [(froalaModel)]="relatedConceptsDes"></div>
+              <input id="hiddenInput" name="hiddenInput" type="hidden" required [(ngModel)]="relatedConceptsDes" />
+            </div>
+          </div>
+        </div>
+        <div class = "card-footer">
+          <button *ngIf="showAddRelated" class="btn btn-primary pull-right customdisable" (click)="addSpecificContent('concept')">Save</button>
+          <button *ngIf="showEditRelated" class="btn btn-primary pull-right customdisable" (click)="editSpecificContent('concept')">Save</button>
+        </div>
+      </div>
+      <app-add-unit-specific-component [courseId] = courseId [unitId] = unitId [categoryId] = lineOfInqId [commonContents] = commonLineOfInq [unitSpecificContents] = specificLineOfInq></app-add-unit-specific-component>
+      <app-unit-standards [courseId] = courseId [unitId] = unitId  title = "Standards"></app-unit-standards>
+      <app-unit-impacts [courseId] = courseId [unitId] = unitId title = "Impacts"></app-unit-impacts>
+      <app-tree-unit-content *ngIf = "transdisciplinaryId" [courseId] = courseId [unitId] = unitId [commonContents] = transdisciplinarySkills [categoryId] = transdisciplinaryId [showTableflag] = "false" title = "Transdisciplinary Skills"></app-tree-unit-content>
+      <div *ngIf = "learnerProfiles" class = "card">
+        <div class = "card-header">
+          <strong>Learner Profile</strong>
+        </div>
+        <div class = "card-body">
+          <div class="form-group row">
+            <div class="col-md-12">
+              <div class="checkbox" *ngFor="let profile of learnerProfiles.content_values; let i = index;">
+                <label for="profile{{profile.id}}">
+                  <input id="profile{{profile.id}}" name="profile{{profile.id}}" [value]="profile.id" type="checkbox" (change)="checked($event, profile.id, 'profile')"
+                    [checked]="checkSelectedNode(profile, 'profile')"> {{profile.text}}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> <!-- Main div card body end -->
+  </div> <!-- Div card end -->
+</div>
+
+
+
+
+
+<!-- For Line of inquiry -->
+<!-- <app-add-unit-specific-component></app-add-unit-specific-component> -->
+<!-- Standards -->
+<!-- Impacts -->
+<!-- Transdisciplinary skills -->

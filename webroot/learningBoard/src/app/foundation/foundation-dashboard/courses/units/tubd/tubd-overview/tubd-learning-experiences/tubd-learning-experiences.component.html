@@ -1,0 +1,210 @@
+<div class="spinner" *ngIf="spinnerEnabled"></div>
+<div *ngIf="!spinnerEnabled">
+<ol class="breadcrumb">
+  <li>
+    <div class="list-group">
+      <div class="list-group-item-action flex-column align-items-start">
+        <h5 class="mb-1">
+          <strong>LEARNING EXPERIENCES</strong>
+        </h5>
+      </div>
+    </div>
+    <!-- .list-group ends here  -->
+  </li>
+</ol>
+<div class="card">
+  <div class="card-header">
+    <strong>Learning Experiences</strong>
+    <span class="btn btn-primary pull-right customdisable" (click)="newTaskModel(addTask)">Add</span>
+  </div>
+  <div class="card-body">
+      <div class="list-group">
+          <li *ngFor="let task of taskList; let i = index" class="list-group-item">
+            <span class="pull-right">
+              <span class="btn btn-warning btn-sm icon"  (click)="openModel(addTask,task)" ><i class="fa fa-edit"></i></span>
+              <span class="btn btn-danger btn-sm icon customdisable" (click)="deleteModel(delete,task)"><i class="fa fa-trash"></i></span>
+              <span *ngIf="!task.isPublished && task.is_accessible" class="btn btn-primary btn-sm icon" (click)="openModel(publish,task)">
+                <i class="fa fa-upload"></i>
+              </span>
+              <span *ngIf="task.isPublished && task.is_accessible" class="btn btn-success btn-sm icon" (click)="openModel(publish,task)">
+                <i class="fa fa-upload"></i>
+              </span>
+            </span>
+            {{ task.name}}
+          </li>
+          
+        </div>
+  </div>
+</div> <!-- card ends here -->
+<ng-template #addTask >
+      <div class="modal-header">
+      <strong class="modal-title pull-left">Add LEARNING EXPERIENCES</strong>
+
+        <button type="button" class="close pull-right" (click)="modalRef.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="" class="form-horizontal" enctype="multipart/form-data" method="post">
+          <div class="card">
+          <div class="card-body">
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <small>
+                    <label class="form-control-label" for="text-input">TITLE</label>
+                  </small>
+                  <input class="form-control" id="title" [(ngModel)]="NewUnitTitle" name="title" placeholder="Title" type="text">
+                </div>
+              </div><!-- title -->
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <small>
+                    <label class="form-control-label" for="text-input" >START DATE - END DATE</label>
+                  </small>
+                  <div id="start_date_div" class="input-group">
+                    <input id="start_date" name="start_date" [(bsValue)]="bsValue" [(ngModel)]="NewUnitDateRange"  #drp="bsDaterangepicker" bsDaterangepicker 
+                      class="form-control" type="text" readonly />
+                    <span (click)="drp.toggle()" class="input-group-addon">
+                      <i class="fa fa-calendar"></i>
+                    </span>
+                  </div>
+                </div>
+              </div><!-- start and end date -->
+                <div class="form-group row">
+                  <div class="col-md-12">
+                      <label class="form-control-label" for="select">Inquiry Questions and Learning Experience Description?</label>
+                    <!-- <textarea class="form-control"  [(ngModel)]="description" id="description" name="description" rows="9"></textarea> -->
+                      <div id="froalaInput" name="froalaInput" [froalaEditor]="editoroptions" [(froalaModel)]="description"></div>
+                      <input id="hiddenInput" name="hiddenInput" type="hidden" required [(ngModel)]="description" />
+
+                  </div>
+                </div>
+                
+          </div>
+          
+          <div class="card-footer"  *ngIf="NewUnitTitle && description">
+            <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Close</button>
+            <button type="button" *ngIf="!assessmentId" class=" btn btn-primary customdisable " (click)="createTask() ">Create Task</button>
+            <button type="button" *ngIf="assessmentId" class=" btn btn-primary customdisable" (click)="createTask() ">Update Task</button>
+            <span *ngIf="assessmentId" class = "customdisable">Scroll down to continue working.</span>
+          </div>
+          </div>
+          <div class="card" *ngIf="assessmentId">
+            <div class="card-body">
+              <div class="form-group row">
+                <div class="col-md-12">
+          
+                  <label class="form-control-label" for="text-input">Is there any opportunity to provide formative feedback in the learning experience?</label>
+                  <span  *ngIf="NewUnitTitle">
+                    <label class="radio-inline" for="inline-radio1">
+                      <input id="inline-radio1" [(ngModel)]="isAccessible" name="inline-radios" (click)="createTask()" type="radio" [value]="true">Yes
+                    </label>
+                    <label class="radio-inline" for="inline-radio2">
+                      <input id="inline-radio2" [(ngModel)]="isAccessible" name="inline-radios" (click)="createTask()" type="radio" [value]="false"> No
+                    </label>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <app-standards *ngIf="assessmentId && isAccessible" [courseId]="courseId" [unitId]="unitId" [assessmentId]="assessmentId" [assessments]="taskList" [treeTitle]="standardTreeTitle" [title]="standardBlockTitle" [unitStandards]="unitData" [mode]="mode"></app-standards>
+            <!-- Impact html -->
+            <app-impacts *ngIf="assessmentId && isAccessible" [courseId]="courseId" [unitId]="unitId" [assessmentId]="assessmentId" [assessments]="taskList" [title]="impactTreeTitle" mode = "highlight"></app-impacts>
+            </div>
+
+        
+        <app-resources-directive *ngIf="assessmentId" [courseId]="courseId" [unitId]="unitId" [object_name]="'assessment'" [object_identifier]="assessmentId" > </app-resources-directive>
+        <app-reflections-directive *ngIf="assessmentId" [courseId]="courseId" [unitId]="unitId" [object_name]="'assessment'" [object_identifier]="assessmentId" [reflections]="reflections"> </app-reflections-directive>
+        </form>
+      </div>
+</ng-template>
+<ng-template #delete>
+  <div class="modal-body">
+    <div style="text-align:center">
+      <button type="button" class="close" (click)="modalRef.hide()" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+        <br>
+      <i class="fa fa-question-circle fa-3x" aria-hidden="true"></i>
+      <br><br>
+     <h5>Do you really want to delete this task?</h5>
+     <br>
+     <button type="button" class="btn btn-primary" (click)="deleteTask(); modalRef.hide();">Yes</button>
+     <button type="button" class="btn btn-outline-primary" (click)="modalRef.hide()">No</button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #publish >
+    <div class="modal-header">
+      <strong class="modal-title pull-left">Publish</strong>
+      <button type="button" class="close pull-right" (click)="modalRef.hide()" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div>
+            <tabset>
+              <tab heading="Publish" id="tab1">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <small>
+                              <label class="form-control-label" for="text-input">Sections</label>
+                            </small>
+                          </div>
+                      <div class="col-md-6 customdisable">
+                        <small>
+                          <label class="form-control-label" for="text-input">START DATE - END DATE</label>
+                        </small>
+                      </div>
+                      <div class="col-md-3 customdisable">
+                          <div id="start_date_div" class="input-group">
+                          </div>
+                        </div>
+                    </div><!-- start and end date -->
+                    <div class="form-group row" *ngFor="let section of courseDetails.sections; let i=index">
+                        <div class="col-md-3">
+                            <strong>
+                                {{ section.name}}
+                            </strong>
+                          </div>
+                      <div class="col-md-6 customdisable">
+                        <div id="start_date_div" class="input-group">
+                          <input #drp="bsDaterangepicker"  bsDaterangepicker 
+                            class="form-control" type="text" readonly  [(ngModel)] = "startDateAndEndDate[i]" (ngModelChange)="dateChange($event)"/>
+                          <span (click)="drp.toggle()" class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-group row">
+                              <button [disabled]="!publishButton" type="button" class="btn btn-primary customdisable" (click)="publishTask(section.course_id, section.id,startDateAndEndDate[i])">Publish</button>
+                            </div>
+                        </div>
+                    </div><!-- start and end date -->
+                    
+              </tab>
+              <!-- <tab (select)="alertMe()"> -->
+              <tab heading="Publish History" id="tab2" [active] = "showHistoryTab">
+                <div *ngIf="publishedHistory && publishedHistory.length !== 0">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Section</th>
+                        <th>Published Date Range</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let data of publishedHistory; let i=index">
+                        <td>{{ data.section.name }}</td>
+                        <td>{{ data.start_date | date:'mediumDate' }} - {{ data.end_date | date:'mediumDate' }} </td>
+                        <td><button (click)="modalRef.hide()"  *ngIf="data.object_name === 'evaluation'" class="btn btn-outline-primary pull-right" routerLink='/feedback/{{data.section.id}}/assessment/{{data.object_identifier}}' type="button">Go To Feedback</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </tab>
+            </tabset>
+          </div>        
+    </div>
+  </ng-template>
+</div>

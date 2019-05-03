@@ -1,0 +1,57 @@
+<div *ngIf = "commonContents" class="card">
+  <div class="card-header">
+    <strong>{{commonContents.meta.heading_2}}</strong>
+    <div class="pull-right">
+      <button class="btn btn-primary customdisable" type="button" (click)="addUnitSpecificContent()">Add</button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card" *ngIf="showAddSpecificContent">
+      <div class="card-body">
+        <!-- <form action="" class="form-horizontal" enctype="multipart/form-data" method="post"> -->
+        <div class="form-group row">
+          <div class="col-md-12">
+            <!-- <textarea class="form-control" [(ngModel)]='unitSpecificValue' id="text-input" name="text-input" placeholder="" type="text">
+                                </textarea> -->
+            <div id="froalaInput" name="froalaInput" [froalaEditor]="editoroptions" [(froalaModel)]="unitSpecificValue"></div>
+            <input id="hiddenInput" name="hiddenInput" type="hidden" required [(ngModel)]="unitSpecificValue" />
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary pull-right customdisable" (click)="addUnitContent()">Save</button>
+        <!-- </form> -->
+      </div>
+    </div>
+    <div *ngIf="unitSpecificContents && unitSpecificContents.length !== 0" class="card">
+      <div class="card-body">
+        <!-- <table class="table table-striped">
+          <tbody>
+            <tr *ngFor="let  specificContents of unitSpecificContents; let i=index">
+              <td [innerHTML]="specificContents.text | safe"></td>
+              <td>
+                <button type="button" (click)="editSpecificContent(specificContents.id)" class="btn btn-warning btn-sm icon">
+                  <i class="fa fa-edit"></i>
+                </button>
+              </td>
+              <td>
+                <button type="button" (click)="deleteSpecificContents(specificContents.id)" class="btn btn-danger btn-sm icon">
+                  <i class="fa fa-trash-o"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table> -->
+        <li *ngFor="let specificContents of unitSpecificContents; let i = index" class="list-group-item">
+          <span class="pull-right">
+            <span class="btn btn-warning btn-sm icon" (click)="editSpecificContent(specificContents.id)">
+              <i class="fa fa-edit"></i>
+            </span>
+            <span class="btn btn-danger btn-sm icon customdisable" (click)="deleteSpecificContents(specificContents.id)">
+              <i class="fa fa-trash"></i>
+            </span>
+          </span>
+          <span [innerHTML]="specificContents.text | safe"></span>
+        </li>
+      </div>
+    </div>
+  </div>
+</div>

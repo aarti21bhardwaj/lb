@@ -1,0 +1,59 @@
+<div *ngIf = "courses" class="app-body">
+  <div class="sidebar content-sidebar">
+    <nav class="sidebar-nav content-sidebar-nav" style="background-color:#2D3840;">
+      <ul class="nav contnet-nav">
+        <li class="nav-title">
+          <button class="btn btn-primary" [routerLink]="['/analytics']">
+            <i class="fa fa-toggle-left" style="font-size:20px"></i> Back to Analytics</button>
+            <br><br>
+          <h5 style="float:left;color:#EBE9EB;">Courses</h5>
+          <div style="padding-top:10px;">
+          </div>
+        </li>
+        <li class="divider"></li>
+        <li>
+          <div class="col-sm-12">
+            <input class="form-control" type="text" name="title" [(ngModel)]="filter_name" placeholder="Enter course name">
+          </div>
+        </li>
+        <li class="divider"></li>
+        <li routerLinkActive="active" class="nav-title" *ngFor="let course of courses | filter:['name', filter_name]">
+          <span [routerLink]="[course.id]" (click) = "changeBanner()"  style="float:left;color:#EBE9EB; cursor:pointer; text-transform: none; font-weight:100; font-size:14px">{{course.name}}-Grade {{course.grade.name}}</span>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+
+  <!-- <div class="sidebar content-sidebar">
+    <nav class="sidebar-nav content-sidebar-nav">
+      <ul class="nav contnet-nav">
+        <li class="nav-title">
+          <button class = "btn btn-primary" [routerLink]="['/analytics']"><i class="fa fa-toggle-left" style="font-size:20px"></i> Back to Analytics</button>
+          
+        </li>
+        <h5 style="text-align:center;color:#4D5462;">Courses</h5>
+        <li class="divider"></li>
+        <li routerLinkActive="active" class="nav-title" *ngFor="let course of courses">
+          <span [routerLink]="[course.id]" style="float:left;color:#4D5462; cursor:pointer;" (click) = "changeBanner()"_>{{course.name}}</span>
+        </li>
+      </ul>
+    </nav>
+  </div> -->
+  <main class="main content-main ">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <router-outlet></router-outlet>
+          <div *ngIf="showBanner" style="background-color:white; height:93vh; max-width:100%;">
+            <div class="container-fluid text-center" style="padding-top: 320px;">
+              <h1>
+                Select a course from the list!
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

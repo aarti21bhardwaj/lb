@@ -1,0 +1,48 @@
+<div class="app-body">
+  <div class="sidebar content-sidebar">
+    <nav class="sidebar-nav content-sidebar-nav">
+      <ul class="nav contnet-nav">
+        <li class="nav-title">
+          <!-- <h5 style="float:left;color:#4D5462;">STUDENT ROSTER</h5> -->
+          <div style="padding-top:20px;">
+            <div class="input-group">
+              <input type="text" class="form-control" [(ngModel)]="filter_name" placeholder="Search for..." aria-label="Search for...">
+              <!-- <span class="input-group-btn">
+                            <button class="btn btn-secondary" disabled type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span> -->
+            </div>
+          </div>
+        </li>
+        <li class="divider"></li>
+        <span *ngIf="students && students.length !== 0">
+          <li class="nav-title" *ngFor="let student of students |  filter:['full_name', filter_name]">
+            <div class="row" routerLinkActive="active" style="cursor: pointer;" [routerLink]="[student.student.id]">
+              <div class="col-4" style="padding-left: 0px; padding-right: 0px;">
+                <img class="col-11 img-avatar" src="{{student.student.image_url ? student.student.image_url : 'http://ts.twinspark.co/dev/learningboard/img/default-img.jpeg'}}">
+              </div>
+              <div class="col-8">
+                <span style="color:black;">{{student.student.last_name}}, {{student.student.first_name}} {{student.student.middle_name}}</span>
+                <br>
+                <i *ngIf="student.is_completed === null" class="fa fa-exclamation-circle fa-2x" style="color:rgb(222, 17, 17)"></i>
+                <i *ngIf="student.is_completed" class="fa fa-check-circle fa-2x" style="color:#00B462"></i>
+                <i *ngIf="student.is_completed === false" class="fa fa-clock-o fa-2x" style="color:#ffc107"></i>
+              </div>
+              <!-- <small>feedback in process</small> -->
+            </div>
+          </li>
+        </span>
+      </ul>
+    </nav>
+  </div>
+</div>
+<router-outlet></router-outlet>
+
+<main class="main content-main" *ngIf="!studentSelected" style="background-color:white; height:93vh;">
+  <div class="container-fluid text-center" style="padding-top: 320px;">
+    <h1>
+      Select a student from the list!
+    </h1>
+  </div>
+</main>

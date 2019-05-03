@@ -1,0 +1,323 @@
+<div class="app-body">
+    
+    <div class="sidebar">
+        
+    </div>
+
+    <div class="main content-main" *ngIf="!addActive">
+        <div class="container-fluid" style="margin-top:30px;">
+            <div class="animated fadeIn">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <h5>
+                                            <strong>
+                                                Evidence List
+                                            </strong>
+                                        </h5>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <input type="text" class="form-control" [(ngModel)]="filter_elment" placeholder="Search impact or course or digital strategy or context or date(MM/DD/YYYY)" aria-label="Search for...">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button class="btn btn-success" style="margin-top:0px;" [routerLink]="['add']">
+                                            Add Evidence
+                                        </button>&nbsp;
+                                        <button class="btn btn-sm" style="margin : 0px; background-color: #00A9B4;">
+                                            <i class="fa fa-list-ul fa-lg" style="font-size: 28px;" (click)="changeView('list')" style="color: white;"></i>&nbsp;
+                                        </button>
+                                        <button class="btn btn-sm" style="margin : 0px; background-color: #00A9B4;">
+                                            <i class="fa fa-th fa-lg" style="font-size: 28px;" (click)="changeView('thumb')" style="color: white;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- thumbnail -->
+                            <div class="card-body" *ngIf="evidences && evidences.length !== 0 && listView">
+                                <div class="card" *ngFor="let evidence of evidences | deepFilter:['impact_and_course_names', filter_elment]">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <h6 class="col-md-7">
+                                                <strong>
+                                                    {{evidence.title}}
+                                                </strong>
+                                            </h6>
+                                            <small class="col-md-2">{{evidence.created | date:'mediumDate'}}</small>
+                                            <div class="col-md-3" style="padding-left: 0px; padding-right: 0px;">
+                                                <button class="btn btn-primary btn-sm" type="button" (click) = "openModal(evidenceFeedback, evidence.id)">Assess Evidence</button>
+                                                <button class="btn btn-warning btn-sm" type="button" [routerLink]="['edit/',evidence.id]">
+                                                    <i class="fa fa-pencil fa-lg" title="Edit Evidence"></i>
+                                                </button>
+                                                <button class="btn btn-danger btn-sm" (click)="openDeleteModal(delete ,evidence.id)">
+                                                    <i class="fa fa-trash fa-lg" title="Delete Evidence"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <span class="row">
+                                            <strong class="col-md-2">Description: </strong>
+                                            <p class="col-md-10"> {{evidence.description}}</p>
+                                        </span>
+                                        <span class="row" *ngIf="evidence.file_name">
+                                            <strong class="col-md-2">File: </strong>
+                                            <span class="col-md-10">
+                                                <p>
+                                                    {{evidence.file_name}}
+                                                    <a target="_new" href="{{evnEndpoint}}{{evidence.file_path}}{{ evidence.file_name }}" class="btn btn-success"><i class="fa fa-download"></i></a>
+                                                </p> 
+                                            </span>    
+                                        </span>
+                                        <span class="row" *ngIf="evidence.url">
+                                            <strong class="col-md-2">Link: </strong>
+                                            <span class="col-md-10">
+                                             
+                                                    
+                                                    <a target="_new" href="{{ evidence.url }}">
+                                                         {{evidence.url}}
+                                                    </a>
+                                                
+                                            </span>
+                                        </span>
+                                        <span class="row" *ngIf="evidence.reflection_description">
+                                            <strong class="col-md-2">Reflection: </strong>
+                                            <p class="col-md-10">{{evidence.reflection_description}}</p>
+                                        </span>
+                                        <span class="row" *ngIf="evidence.reflection_file_name">
+                                            <strong class="col-md-2">Reflection File: </strong>
+                                            <span class="col-md-10">
+                                                <p>
+                                                    {{evidence.reflection_file_name}}
+                                                    <a target="_new" href="{{evnEndpoint}}{{evidence.reflection_file_path}}{{ evidence.reflection_file_name }}" class="btn btn-success"><i class="fa fa-download"></i></a>
+                                                </p>
+                                            </span>
+                                        </span>
+                                        <span class="row">
+                                            <strong class="col-md-2">Courses: </strong>
+                                            <p class="col-md-10"><span style="white-space:normal" *ngFor="let section of evidence.evidence_sections, let isLast=last">{{section.section.course.name}}{{isLast ? '' : ', '}}</span></p>
+                                        </span>
+                                        <span class="row" *ngIf="evidence.evidence_impacts && evidence.evidence_impacts.length !== 0">
+                                            <strong class="col-md-2">Impacts: </strong>
+                                            <!-- <p class="col-md-10"> -->
+                                                <ul class="col-md-10">
+                                                    <li *ngFor="let impact of evidence.evidence_impacts">
+                                                        <span>{{impact.impact.name}} : <strong>{{ impact.evidence_impact_score ? impact.evidence_impact_score.scale_value.name : 'Not Assessed'}}</strong></span>
+                                                    </li>
+                                                </ul>
+                                        </span>
+                                        <span class="row" *ngIf="evidence.evidence_contexts && evidence.evidence_contexts.length !== 0">
+                                            <strong class="col-md-2">Contexts: </strong>
+                                            <p class="col-md-10">
+                                                <span style="white-space:normal" *ngFor="let context of evidence.evidence_contexts, let isLast=last">{{context.context.name}}{{isLast ? '' : ', '}}</span>
+                                            </p>
+                                        </span>
+                                        <!-- Hidden digital strategy -->
+                                        <span class="row" *ngIf="evidence.evidence_contents && evidence.evidence_contents.length !== 0" [hidden]= true>
+                                            <strong class="col-md-2">Digital Strategies: </strong>
+                                            <p class="col-md-10">
+                                                <span style="white-space:normal" *ngFor="let content of evidence.evidence_contents, let isLast=last">{{content.content_value.text}}{{isLast
+                                                    ? '' : ', '}}</span>
+                                            </p>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row card-body" *ngIf="evidences && evidences.length !== 0 && !listView">
+                                <div class="col-sm-3 col-md-3" *ngFor="let evidence of evidences | deepFilter:['impact_and_course_names', filter_elment]">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <!-- <li>{{evidence.file_name | fileExtension}}</li> -->
+                                            <img *ngIf = "evidence.url && !evidence.file_name && !evidence.file_path" src = "webroot/learningBoard/src/assets/img/fileTypes/link.png" style="width: 163px;">
+                                            <!-- <div *ngIf = "evidence.url">{{evidence.url}}</div> -->
+                                            <img *ngIf = "evidence.file_name && evidence.file_path" src = "{{evidence.file_name  | fileExtension}}" style="width: 163px;">
+                                            <img *ngIf = "!evidence.file_name && !evidence.file_path && !evidence.url" src = "webroot/learningBoard/src/assets/img/fileTypes/default-image.png" style="width: 163px;">
+                                            <br><br><strong>{{evidence.title}}</strong>
+                                        </div>
+                                        <div class="card-footer text-center" style="padding: 0.75rem 0.25rem !important;">
+                                            <div class="col-md-12" style="padding-left: 0px; padding-right: 0px;">
+                                                    <button class="btn btn-primary btn-sm" type="button" (click) = "openModal(evidenceFeedback, evidence.id)">Assess</button>
+                                                    <button class="btn btn-success btn-sm" type="button" (click) = "openViewModal(evidenceView, evidence.id)">
+                                                        <i class="fa fa-eye fa-lg" title="View Evidence"></i>
+                                                    </button>
+                                                    <button class="btn btn-warning btn-sm" type="button" [routerLink]="['edit/',evidence.id]">
+                                                        <i class="fa fa-pencil fa-lg" title="Edit Evidence"></i>
+                                                    </button>
+                                                    <button class="btn btn-danger btn-sm" (click)="openDeleteModal(delete ,evidence.id)">
+                                                        <i class="fa fa-trash fa-lg" title="Delete Evidence"></i>
+                                                    </button>
+                                            </div>
+                                            <!-- <span class="badge badge-success float-right" (click) = "openViewModal(evidenceView, evidence.id)">View</span> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body" *ngIf="evidences && evidences.length == 0">
+                                <h6>No evidences added yet.</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>
+
+<ng-template #evidenceFeedback>
+    <div class="modal-header">
+        <strong class="modal-title pull-left">Self Assessment</strong>
+        <button type="button" class="close pull-right" (click)="modalRef.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div *ngIf="evidence" class="modal-body">
+        <div class = "card">
+            <div class = "card-header">
+                <!-- <div class = "pull-right">
+                    <button class=" btn btn-warning btn-block" (click)="beforeSave(1)">
+                        <strong>Mark Complete</strong>
+                    </button>
+                </div> -->
+                <strong>{{evidence.title}}</strong>
+            </div>
+            <div class="card-body" *ngIf="impacts.length !== 0">
+                <div class="card" *ngFor="let impactCategory of impactCategories">
+                    <div class="card-header">
+                        <h6>{{impactCategory.name}}</h6>
+                    </div>
+                    <div class="card-body" *ngFor="let impact of impacts[impactCategory.id]">
+                        <div class="card">
+                            <div class="card-body">
+                                <p>{{impact.impact.name}}</p>
+                            <span [hidden]="impactModel[impact.impact_id].scale_value_id == impactScale.scale_values[0].id || impactModel[impact.impact_id].scale_value_id == impactScale.scale_values[1].id">
+                                <input id="ion-slider-impact{{impact.impact_id}}" tabindex="-1" readonly="">
+                                <br>
+                                <strong [style.color]="impactScaleValueNameMap[impactModel[impact.impact_id].scale_value_id].color" *ngIf="impactScaleValueNameMap && impactScaleValueNameMap[impactModel[impact.impact_id].scale_value_id]">
+                                    {{ impactScaleValueNameMap[impactModel[impact.impact_id].scale_value_id].name}}
+                                </strong>
+                            </span>
+                            <!-- <div class="checkbox pull-right">
+                                <label for="notAssessedCheckboxImp{{impact.id}}">
+                
+                                    <input id="notAssessedCheckboxImp{{impact.id}}" name="notAssessedCheckboxImp{{impact.id}}" type="checkbox" [ngModel]="impactModel[impact.id].scale_value_id == impactScale.scale_values[0].id? true: false"
+                                        (ngModelChange)="$event ? impactModel[impact.id].scale_value_id = impactScale.scale_values[0].id : impactModel[impact.id].scale_value_id = defaultImpactScaleValue"> {{ impactScale.scale_values[0].name }}
+                                </label>
+                            </div>
+                            <div class="checkbox pull-right">
+                                <label for="checkboxImp{{impact.id}}">
+                                    
+                                    <input id="checkboxImp{{impact.id}}" name="checkboxImp{{impact.id}}" type="checkbox" [ngModel]="impactModel[impact.id].scale_value_id == impactScale.scale_values[1].id? true: false"
+                                        (ngModelChange)="$event ? impactModel[impact.id].scale_value_id = impactScale.scale_values[1].id : impactModel[impact.id].scale_value_id = defaultImpactScaleValue"> {{ impactScale.scale_values[1].name }}
+                                </label>
+                            </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" *ngIf="impacts.length == 0">
+                <h6>No impacts found.</h6>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #delete>
+    <div class="modal-body">
+        <div style="text-align:center">
+            <button type="button" class="close" (click)="modalRef.hide()" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <br>
+            <i class="fa fa-question-circle fa-3x" aria-hidden="true"></i>
+            <br>
+            <br>
+            <h5>Do you really want to delete this evidence?</h5>
+            <br>
+            <button type="button" class="btn btn-primary" (click)="deleteEvidence(); modalRef.hide();">Yes</button>
+            <button type="button" class="btn btn-outline-primary" (click)="modalRef.hide()">No</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #evidenceView>
+        <div *ngIf="evidence" class="modal-header">
+            <strong class="modal-title pull-left">{{evidence.title}}</strong>
+            <button type="button" class="close pull-right" (click)="modalRef.hide()" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div *ngIf="evidence" class="modal-body">
+            <div class = "card">
+                    <div class="card-body">
+                            <span class="row">
+                                <strong class="col-md-3">Description: </strong>
+                                <p class="col-md-9"> {{evidence.description}}</p>
+                            </span>
+                            <span class="row" *ngIf="evidence.file_name">
+                                <strong class="col-md-3">File: </strong>
+                                <span class="col-md-9">
+                                    <p>
+                                        {{evidence.file_name}}
+                                        <a target="_new" href="{{evnEndpoint}}{{evidence.file_path}}{{ evidence.file_name }}" class="btn btn-success"><i class="fa fa-download"></i></a>
+                                    </p> 
+                                </span>    
+                            </span>
+                            <span class="row" *ngIf="evidence.url">
+                                <strong class="col-md-3">Link: </strong>
+                                <span class="col-md-9">
+                                 
+                                        
+                                        <a target="_new" href="{{ evidence.url }}">
+                                             {{evidence.url}}
+                                        </a>
+                                    
+                                </span>
+                            </span>
+                            <span class="row" *ngIf="evidence.reflection_description">
+                                <strong class="col-md-3">Reflection: </strong>
+                                <p class="col-md-9">{{evidence.reflection_description}}</p>
+                            </span>
+                            <span class="row" *ngIf="evidence.reflection_file_name">
+                                <strong class="col-md-3">Reflection File: </strong>
+                                <span class="col-md-9">
+                                    <p>
+                                        {{evidence.reflection_file_name}}
+                                        <a target="_new" href="{{evnEndpoint}}{{evidence.reflection_file_path}}{{ evidence.reflection_file_name }}" class="btn btn-success"><i class="fa fa-download"></i></a>
+                                    </p>
+                                </span>
+                            </span>
+                            <span class="row">
+                                <strong class="col-md-3">Courses: </strong>
+                                <p class="col-md-9"><span style="white-space:normal" *ngFor="let section of evidence.evidence_sections, let isLast=last">{{section.section.course.name}}{{isLast ? '' : ', '}}</span></p>
+                            </span>
+                            <span class="row" *ngIf="evidence.evidence_impacts && evidence.evidence_impacts.length !== 0">
+                                <strong class="col-md-3">Impacts: </strong>
+                                <!-- <p class="col-md-10"> -->
+                                    <ul class="col-md-9">
+                                        <li *ngFor="let impact of evidence.evidence_impacts">
+                                            <span>{{impact.impact.name}} : <strong>{{ impact.evidence_impact_score ? impact.evidence_impact_score.scale_value.name : 'Not Assessed'}}</strong></span>
+                                        </li>
+                                    </ul>
+                            </span>
+                            <span class="row" *ngIf="evidence.evidence_contexts && evidence.evidence_contexts.length !== 0">
+                                <strong class="col-md-3">Contexts: </strong>
+                                <p class="col-md-9">
+                                    <span style="white-space:normal" *ngFor="let context of evidence.evidence_contexts, let isLast=last">{{context.context.name}}{{isLast ? '' : ', '}}</span>
+                                </p>
+                            </span>
+                            <!-- Hide digital strategy -->
+                            <span class="row" *ngIf="evidence.evidence_contents && evidence.evidence_contents.length !== 0" [hidden]= true>
+                                <strong class="col-md-3">Digital Strategies: </strong>
+                                <p class="col-md-9">
+                                    <span style="white-space:normal" *ngFor="let content of evidence.evidence_contents, let isLast=last">{{content.content_value.text}}{{isLast
+                                        ? '' : ', '}}</span>
+                                </p>
+                            </span>
+                        </div>
+            </div>
+        </div>
+    </ng-template>

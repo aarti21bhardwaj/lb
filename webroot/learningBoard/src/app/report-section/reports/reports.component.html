@@ -1,0 +1,362 @@
+<div class="app-body" *ngIf="reportSettings">
+
+    <!-- spinner -->
+    <div class="spinner" *ngIf="spinnerEnabled"></div>
+
+    <main class="main content-main">
+        <div class="container-fluid">
+            <ol class="breadcrumb">
+                <li>
+                    <div class="list-group">
+                        <div class=" list-group-item list-group-item-action flex-column align-items-start">
+                            <div class="row">
+                                <div class="col-12">
+                                    <!-- <div class="row">
+                                        <div class="col-4 text-center"></div>
+                                    </div> -->
+                                    <div class="row">
+                                        <div class="col-1">
+                                            <img class="img-avatar" style="height: 50px;" src="{{student.image_url ? student.image_url : 'http://ts.twinspark.co/dev/learningboard/img/default-img.jpeg'}}">
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="row">
+                                                <h5 class="mb-1" *ngIf="student">
+                                                    <strong>{{student.first_name}} {{student.middle_name}} {{student.last_name}}</strong>
+                                                </h5>
+                                            </div>
+                                            <div class="row">
+                                                <h6>
+                                                     {{teachers.sectionName}} | {{teachers.teacherName}}
+                                                </h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                             <a class="btn btn-warning btn-block" target="_blank" href="{{evnEndpoint}}pdf/report/{{studentId}}/{{reportSettings.report_template_id}}">
+                                                <strong>Preview PDF</strong>
+                                            </a>
+                                        </div>
+                                        <div class="col-3">
+                                            <button *ngIf="reportSettings.report_template.report_template_course_scores.length == 0 || !reportSettings.report_template.report_template_course_scores[0].is_completed" class="btn btn-warning btn-block"
+                                                (click)="save(1)">
+                                                <strong>Mark Complete</strong>
+                                            </button>
+                                            <button *ngIf="reportSettings.report_template.report_template_course_scores.length != 0 && reportSettings.report_template.report_template_course_scores[0].is_completed" class="btn btn-success btn-block"
+                                                disabled="disabled">
+                                                <strong>Completed</strong>
+                                                <i class="fa fa-check-circle fa-lg" style="color:#fff"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-2">
+                                            <button class="btn btn-success btn-block" (click)="save(0)">
+                                                <strong>Save</strong>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf = "courseLinks && courseLinks.length >0"  class = "list-group">
+                        <div class=" list-group-item list-group-item-action flex-column align-items-start">
+                            <span class="row">
+                                <strong class="col-md-2">Course Links: </strong>
+                                <p class="col-md-10">
+                                    <a *ngFor="let link of courseLinks" href="{{link.link}}">{{link.name}}{{isLast ? '' : ', '}} </a>
+                                    <!-- <span style="white-space:normal" *ngFor="let link of courseLinks, let isLast=last">{{link.name}}{{isLast ? '' : ', '}}</span> -->
+                                </p>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- .list-group ends here  -->
+                </li>
+            </ol>
+
+            <!-- Center Div -->
+            <div class="row">
+                <div class="col-md-12" *ngIf="reportSettings && reportSettings.course_status">
+
+                    <div class="card" *ngIf="reportSettings.course_scale_status || reportSettings.course_comment_status">
+                        <div class="card-header">
+                            <strong>COURSE</strong>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6>{{reportSettings.course.name}}</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12" style="margin-top: 15px;" *ngIf="reportSettings['course_scale_status']">
+                                            <span [hidden]="courseModel.scale_value_id === academicScale.scale_values[0].id || courseModel.scale_value_id === academicScale.scale_values[1].id">
+                                                <input id="ion-slider-course" tabindex="-1" readonly="">
+                                                <br>
+                                                <strong [style.color]="academicScaleValueNameMap[courseModel.scale_value_id].color"
+                                                    *ngIf="academicScaleValueNameMap && academicScaleValueNameMap[courseModel.scale_value_id]">
+                                                    <!-- {{ scaleValueName(academicScale.scale_values, courseModel.scale_value_id)}} -->
+                                                    {{ academicScaleValueNameMap[courseModel.scale_value_id].name }}                                                    
+                                                </strong>
+                                            </span>
+                                            <div class="checkbox pull-right">
+                                                <label for="notAssessedCheckboxCourse">
+                                                    <input id="notAssessedCheckboxCourse" name="notAssessedCheckboxCourse" type="checkbox" 
+                                                                [ngModel]="courseModel.scale_value_id === academicScale.scale_values[0].id? true: false" (ngModelChange)="$event ? courseModel.scale_value_id = academicScale.scale_values[0].id : courseModel.scale_value_id = defaultAcademicScaleValue"> 
+                                                     {{academicScale.scale_values[0].name}}
+                                                </label>
+                                            </div>
+                                            <div class="checkbox pull-right">
+                                                <label for="notAssessedCheckboxCourse">
+                                                    <input id="notAssessedCheckboxCourse" name="notAssessedCheckboxCourse" type="checkbox" [ngModel]="courseModel.scale_value_id === academicScale.scale_values[1].id? true: false"
+                                                        (ngModelChange)="$event ? courseModel.scale_value_id = academicScale.scale_values[1].id : courseModel.scale_value_id = defaultAcademicScaleValue"> 
+                                                        {{academicScale.scale_values[1].name}}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12" *ngIf="reportSettings['course_comment_status']">
+                                            <textarea class="form-control" id="comment" name="comment" placeholder="Enter your comments here..." rows="4"
+                                            [(ngModel)]="courseModel.comment" (focusout)="save(0)"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf = "reportSettings.show_student_reflection || reportSettings.show_teacher_reflection" class = "card">
+                        <div class = "card-header">
+                            <strong>Reflections</strong>
+                        </div>
+                        <div class = "card-body">
+                            <div class="col-md-12" *ngIf = "reportSettings.show_student_reflection">
+                                <label class="form-control-label" for="select">Student Comment</label>
+                                <textarea class="form-control" id="studentcomment" name="studentcomment" placeholder="Student Comment" rows="4" [(ngModel)]="studentComment"
+                                    (focusout)="saveReflection()"></textarea>
+                            </div>
+                            <br>
+                            <div class="col-md-12" *ngIf="reportSettings.show_teacher_reflection">
+                                <label class="form-control-label" for="select">Teacher General Comment</label>
+                                <textarea class="form-control" id="teachercomment" name="teachercomment" placeholder="Teacher General Comment" rows="4" [(ngModel)]="teacherComment"
+                                    (focusout)="saveReflection()"></textarea>
+                            </div>
+                            <!-- <ng-container *ngIf = "reportSettings.show_teacher_reflection">
+                                <label class="form-control-label" for="select">Teacher General Comment</label>
+                                <div id="froalaInput" name="froalaInput" [froalaEditor]="editoroptions" [(froalaModel)]="teacherComment"></div>
+                                <input id="hiddenInput" name="hiddenInput" type="hidden" required [(ngModel)]="teacherComment" />
+                            </ng-container> -->
+                        </div>
+                    </div>
+
+                    <div *ngIf = "studentServices && reportSettings.show_special_services" class = "card">
+                        <div class = "card-header">
+                            <strong>Student Services</strong>
+                        </div>
+                        <div class = "card-body">
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <label class="checkbox-inline" for="inline-checkbox{{service.id}}" *ngFor="let service of studentServices; let i = index;">
+                                        <input id="inline-checkbox{{service.id}}" name="inline-checkbox{{service.id}}" type="checkbox" [value]="service.id" (change)="checked($event, service.id)"
+                                            [checked]="checkSelectedNode(service)">{{service.text}} 
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Standards -->
+                    <div class="card" *ngIf="strands">
+                        <div class="card-header">
+                            <strong>Academic Standards</strong>
+                        </div>
+                        <!-- .card starts here-->
+                        <div class="card-body" *ngIf="strands.length !== 0">
+                            <ng-container *ngFor="let strand of strands">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6>{{strand.strand.name}}</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row" style="margin-bottom: 20px;" *ngIf="strand.strand_id">
+                                            <div class="col-md-12" style="margin-top: 15px;" *ngIf="reportSettings['strand_status'] && !reportSettings['standard_status']">
+                                                <span [hidden]="strandModel[strand.id].scale_value_id == academicScale.scale_values[0].id || strandModel[strand.id].scale_value_id == academicScale.scale_values[1].id">
+                                                    <input id="ion-slider-strand{{strand.id}}" tabindex="-1" readonly="">
+                                                    <!-- <input type="range" list="academicSteplist" class="slider-width100" min="{{academicScale.scale_values[1].id}}" max="{{academicScale.scale_values[academicScale.scale_values.length-1].id}}"
+                                                        step="1"> -->
+                                                    <br>
+                                                    <strong [style.color]="academicScaleValueNameMap[strandModel[strand.id].scale_value_id].color"
+                                                            *ngIf="academicScaleValueNameMap && academicScaleValueNameMap[strandModel[strand.id].scale_value_id]">
+                                                        <!-- {{ scaleValueName(academicScale.scale_values, strandModel[strand.id].scale_value_id)}} -->
+                                                        {{ academicScaleValueNameMap[strandModel[strand.id].scale_value_id].name }}                                                        
+                                                    </strong>
+                                                </span>
+                                                <div class="checkbox pull-right">
+                                                    <label for="notAssessedCheckboxStrand{{strand.id}}">
+                                                        <input id="notAssessedCheckboxStrand{{strand.id}}" name="notAssessedCheckboxStrand{{strand.id}}" type="checkbox"
+                                                         [ngModel]="strandModel[strand.id].scale_value_id == academicScale.scale_values[0].id ? true: false" (ngModelChange)="$event ? strandModel[strand.id].scale_value_id = academicScale.scale_values[0].id : strandModel[strand.id].scale_value_id = defaultAcademicScaleValue"> 
+                                                         {{academicScale.scale_values[0].name}}
+                                                    </label>
+                                                </div>
+                                                <div class="checkbox pull-right">
+                                                    <label for="inEvidenceCheckboxStrand{{strand.id}}">
+                                                        <input id="inEvidenceCheckboxStrand{{strand.id}}" name="inEvidenceCheckboxStrand{{strand.id}}" type="checkbox" [ngModel]="strandModel[strand.id].scale_value_id == academicScale.scale_values[1].id ? true: false"
+                                                            (ngModelChange)="$event ? strandModel[strand.id].scale_value_id = academicScale.scale_values[1].id : strandModel[strand.id].scale_value_id = defaultAcademicScaleValue"> 
+                                                            {{academicScale.scale_values[1].name}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12" *ngIf="reportSettings['strand_comment_status']">
+                                                <textarea class="form-control" id="comment" name="comment" placeholder="Enter your comments here..." rows="4"
+                                                 [(ngModel)]="strandModel[strand.id].comment" (focusout)="save(0)"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="card" *ngFor="let standard of strand.report_standards">
+                                            <div class="card-header">                                            
+                                                <h6>{{standard.standard.name}}</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-12" style="margin-top: 15px;" *ngIf="reportSettings['standard_status']">
+                                                        <span [hidden]="standardModel[standard.id].scale_value_id == academicScale.scale_values[0].id || standardModel[standard.id].scale_value_id == academicScale.scale_values[1].id">
+                                                            <!-- <input type="range" list="academicSteplist" class="slider-width100" min="{{academicScale.scale_values[1].id}}" max="{{academicScale.scale_values[academicScale.scale_values.length-1].id}}"
+                                                            step="1"> -->
+                                                            <input id="ion-slider-standard{{standard.id}}" tabindex="-1" readonly="">
+                                                            <br>
+                                                            <strong [style.color]="academicScaleValueNameMap[standardModel[standard.id].scale_value_id].color"
+                                                                    *ngIf="academicScaleValueNameMap && academicScaleValueNameMap[standardModel[standard.id].scale_value_id]">
+                                                                <!-- {{ scaleValueName(academicScale.scale_values, standardModel[standard.id].scale_value_id)}} -->
+                                                               {{ academicScaleValueNameMap[standardModel[standard.id].scale_value_id].name }}
+                                                            </strong>
+                                                        </span>
+                                                        <div class="checkbox pull-right">
+                                                            <label for="notAssessedCheckboxStandard{{standard.id}}">
+                                                                <input id="notAssessedCheckboxStandard{{standard.id}}" name="notAssessedCheckboxStandard{{standard.id}}" type="checkbox" 
+                                                                [ngModel]="standardModel[standard.id].scale_value_id == academicScale.scale_values[0].id ? true: false" (ngModelChange)="$event ? standardModel[standard.id].scale_value_id = academicScale.scale_values[0].id : standardModel[standard.id].scale_value_id
+                                                                = defaultAcademicScaleValue"> 
+                                                                 {{academicScale.scale_values[0].name}}
+                                                            </label>
+                                                        </div>
+                                                        <div class="checkbox pull-right">
+                                                            <label for="inEvidenceCheckboxStandard{{standard.id}}">
+                                                                <input id="inEvidenceCheckboxStandard{{standard.id}}" name="inEvidenceCheckboxStandard{{standard.id}}" type="checkbox" [ngModel]="standardModel[standard.id].scale_value_id == academicScale.scale_values[1].id ? true: false"
+                                                                    (ngModelChange)="$event ? standardModel[standard.id].scale_value_id = academicScale.scale_values[1].id : standardModel[standard.id].scale_value_id = defaultAcademicScaleValue"> 
+                                                                    {{academicScale.scale_values[1].name}}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12" *ngIf="reportSettings['standard_comment_status']">
+                                                        <textarea class="form-control" id="comment" name="comment" placeholder="Enter your comments here..."
+                                                            rows="4" [(ngModel)]="standardModel[standard.id].comment" (focusout)="save(0)"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                        <div class="card-body" *ngIf="strands.length == 0">
+                            <h6>No strands found.</h6>
+                        </div>
+                    </div>
+
+                    <div class="card" *ngIf="impacts">
+                        <div class="card-header">
+                            <strong>ATLs</strong>
+                        </div>
+
+                        <div class="card-body" *ngIf="impacts.length !== 0">
+                            <div class="card" *ngFor="let impact of impacts">
+                                <div class="card-header">
+                                    <h6>{{impact.impact.name}}</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12" style="margin-top: 15px;" *ngIf="reportSettings['impact_status']">
+                                            <span [hidden]="impactModel[impact.id].scale_value_id == impactScale.scale_values[0].id || impactModel[impact.id].scale_value_id == impactScale.scale_values[1].id">
+                                                <input id="ion-slider-impact{{impact.id}}" tabindex="-1" readonly="">
+                                                <!-- <input type="range" list="impactSteplist" class="slider-width100" min="{{impactScale.scale_values[1].id}}" max="{{impactScale.scale_values[impactScale.scale_values.length-1].id}}"
+                                                    step="1"> -->
+                                                <br>
+                                                <strong [style.color]="impactScaleValueNameMap[impactModel[impact.id].scale_value_id].color"
+                                                        *ngIf="impactScaleValueNameMap && impactScaleValueNameMap[impactModel[impact.id].scale_value_id]">
+                                                    <!-- {{ scaleValueName(impactScale.scale_values, impactModel[impact.id].scale_value_id)}} -->
+                                                    {{ impactScaleValueNameMap[impactModel[impact.id].scale_value_id].name}}
+                                                </strong>
+                                            </span>
+                                            <div class="checkbox pull-right">
+                                                <label for="notAssessedCheckboxImpact{{impact.id}}">
+                                                    <input id="notAssessedCheckboxImpact{{impact.id}}" name="notAssessedCheckboxImpact{{impact.id}}" type="checkbox" 
+                                                                [ngModel]="impactModel[impact.id].scale_value_id == impactScale.scale_values[0].id? true: false" (ngModelChange)="$event ? impactModel[impact.id].scale_value_id = impactScale.scale_values[0].id : impactModel[impact.id].scale_value_id
+                                                                = defaultImpactScaleValue"> 
+                                                     {{impactScale.scale_values[0].name}}
+                                                </label>
+                                            </div>
+                                            <div class="checkbox pull-right">
+                                                <label for="inEvidenceCheckboxImpact{{impact.id}}">
+                                                    <input id="inEvidenceCheckboxImpact{{impact.id}}" name="inEvidenceCheckboxImpact{{impact.id}}" type="checkbox" [ngModel]="impactModel[impact.id].scale_value_id == impactScale.scale_values[1].id? true: false"
+                                                        (ngModelChange)="$event ? impactModel[impact.id].scale_value_id = impactScale.scale_values[1].id : impactModel[impact.id].scale_value_id
+                                                                                                            = defaultImpactScaleValue"> {{impactScale.scale_values[1].name}}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12" *ngIf="reportSettings['impact_comment_status']">
+                                            <textarea class="form-control" id="comment" name="comment" placeholder="Enter your comments here..." rows="4"
+                                            [(ngModel)]="impactModel[impact.id].comment" (focusout)="save(0)"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body" *ngIf="impacts.length == 0">
+                            <h6>No impacts found.</h6>
+                        </div>
+                    </div>
+                    <!-- Impact card ends here-->
+                </div>
+
+                <div class="col-md-12" *ngIf="reportSettings && !reportSettings.course_status" style="background-color:white; height:93vh;">
+                    <div class="container-fluid text-center" style="padding-top: 320px;">
+                        <h1>
+                            Course not enabled for reporting.
+                        </h1>
+                    </div>
+                </div>
+                
+                <!-- .col-md-4 central div ends here-->
+                <!-- <div class="col-md-4">
+                    <div class="card">
+                        <button class="btn btn-success btn-block" (click)="beforeSave()">
+                            <strong>Save</strong>
+                        </button>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </main>
+</div>
+
+<main class="main content-main" *ngIf="!reportSettings">
+    <div class="container-fluid">
+        <div class="col-md-12" style="background-color:white; height:93vh;">
+            <div class="container-fluid text-center" style="padding-top: 320px;">
+                <h1>
+                    No course settings found for this student section combination.
+                </h1>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+<!-- Steplist Academic-->
+<datalist *ngIf="academicScale && academicScale.scale_values && academicScale.scale_values.length !== 0" id="academicSteplist">
+    <option *ngFor="let value of academicScale.scale_values">{{value.id}}</option>
+</datalist>
+
+<!-- Steplist Impact-->
+<datalist *ngIf="impactScale && impactScale.scale_values && impactScale.scale_values.length !== 0" id="impactSteplist">
+    <option *ngFor="let value of impactScale.scale_values">{{value.id}}</option>
+</datalist>
+
+
+<!-- {{ slider('strand', strandModel, strand.id, academicScale.scale_values[1].sort_order, academicScale.scale_values[academicScale.scale_values.length-1].sort_order)}} -->
+<!-- {{ slider('standard', standardModel, standard.id, academicScale.scale_values[1].sort_order, academicScale.scale_values[academicScale.scale_values.length-1].sort_order)}} -->
+<!-- {{ slider('impact', impactModel, impact.id, impactScale.scale_values[1].sort_order, impactScale.scale_values[impactScale.scale_values.length-1].sort_order)}} -->

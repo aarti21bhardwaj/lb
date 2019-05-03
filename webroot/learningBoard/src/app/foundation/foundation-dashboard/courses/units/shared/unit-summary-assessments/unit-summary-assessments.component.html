@@ -1,0 +1,20 @@
+<accordion>
+  <accordion-group #group [isOpen] = "isExpanded">
+    <div accordion-heading class="clearfix">
+      <strong>{{title}}</strong>
+      <!-- <button>Expand All</button> -->
+    </div>
+    <ul *ngIf="type == 'SummativeTasks' && summativeTaskList">
+      <li *ngFor="let task of summativeTaskList">
+        <span>{{task.name}}</span>
+        <!-- <p>{{standard.standard.name}}</p> -->
+      </li>
+    </ul>
+    <ul *ngIf="type == 'LearningExperiences' && learningExperienceTasklist">
+      <li *ngFor="let task of learningExperienceTasklist">
+        <span>{{task.name}}</span>
+        <!-- <p>{{impact.impact.name}}</p> -->
+      </li>
+    </ul>
+  </accordion-group>
+</accordion>

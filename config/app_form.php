@@ -1,0 +1,37 @@
+<?php
+
+	return [
+	        'button' => '<div class="form-group"><div class="col-sm-4 col-sm-offset-2"><button class="btn btn-primary" {{attrs}}>{{text}}</button></div></div>',
+	        'checkbox' => '<input type="checkbox" name="{{name}}" value="{{value}}"{{attrs}}>',
+	        'checkboxFormGroup' => '{{label}}',
+	        'checkboxWrapper' => '<div class="checkbox">{{label}}</div>',
+	        'dateWidget' => '{{year}}{{month}}{{day}}{{hour}}{{minute}}{{second}}{{meridian}}',
+	        'error' => '<div class="error-message">{{content}}</div>',
+	        'errorList' => '<ul>{{content}}</ul>',
+	        'errorItem' => '<li>{{text}}</li>',
+	        'file' => '<input type="file" name="{{name}}"{{attrs}}>',
+	        'fieldset' => '<fieldset{{attrs}}>{{content}}</fieldset>',
+	        'formStart' => '<div class="ibox-content"><form class="form-horizontal" {{attrs}}>',
+	        'formEnd' => '</form></div>',
+	        'formGroup' => '{{label}}{{input}}',
+	        'hiddenBlock' => '<div style="display:none;">{{content}}</div>',
+	        'input' => '<div class="col-sm-10"><input type="{{type}}" class="form-control" name="{{name}}"{{attrs}}/></div>',
+	        'inputSubmit' => '<input type="{{type}}"{{attrs}}/>',
+	        'inputContainer' => '<div class="form-group {{type}}{{required}}">{{content}}</div><div class="hr-line-dashed"></div>',
+	        'inputContainerError' => '<div class="input {{type}}{{required}} error">{{content}}{{error}}</div>',
+	        'label' => '<label class="col-sm-2 control-label" {{attrs}}>{{text}}</label>',
+	        'nestingLabel' => '{{hidden}}{{input}}<label{{attrs}}>{{text}}</label>',
+	        'legend' => '<legend>{{text}}</legend>',
+	        'multicheckboxTitle' => '<legend>{{text}}</legend>',
+	        'multicheckboxWrapper' => '<fieldset{{attrs}}>{{content}}</fieldset>',
+	        'option' => '<option value="{{value}}"{{attrs}}>{{text}}</option>',
+	        'optgroup' => '<optgroup label="{{label}}"{{attrs}}>{{content}}</optgroup>',
+	        'select' => '<div class="col-sm-10"><select name="{{name}}" class="form-control m-b" {{attrs}}>{{content}}</select></div>',
+	        'selectMultiple' => '<div class="col-sm-10"><select class="form-control m-b" name="{{name}}[]" multiple="multiple"{{attrs}}>{{content}}</select></div>',
+	        'radio' => '<input type="radio" name="{{name}}" value="{{value}}"{{attrs}}>',
+	        'radioWrapper' => '{{label}}',
+	        'textarea' => '<textarea name="{{name}}"{{attrs}}>{{value}}</textarea>',
+	        'submitContainer' => '<div class="submit">{{content}}</div>',
+	    ];
+
+	?> 

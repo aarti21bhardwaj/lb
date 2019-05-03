@@ -1,0 +1,11 @@
+<!-- <div class="card">
+  <div class="card-header">
+    <strong>Standards Usage</strong>
+  </div>
+  <div class="card-body">
+  </div>
+</div> -->
+<div *ngIf = "categories && categories.length > 0" [chart]="barChart"></div>
+<div *ngIf = "categories.length == 0">
+  <p>Insufficient Data</p>
+</div>

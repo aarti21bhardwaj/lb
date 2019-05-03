@@ -1,0 +1,77 @@
+ li.nav-title.active {
+    background-color: lightblue;
+}
+
+.ui-select-match-item.btn{
+  padding: 0px;
+}
+ 
+ ::ng-deep input {
+  background-color:#EFEFEF;
+  /*  top: 0px;
+    left: 0px; */
+    opacity: 1; /* in FireFox */ 
+    filter: alpha(opacity=40); /* in IE */
+    pointer-events: none;
+  }
+
+  input {
+  background-color:#EFEFEF;
+  /*  top: 0px;
+    left: 0px; */
+    opacity: 1; /* in FireFox */ 
+    filter: alpha(opacity=40); /* in IE */
+    pointer-events: none;
+  }
+
+  ng-select {
+    background-color:#EFEFEF;
+  /*  top: 0px;
+    left: 0px; */
+    opacity: 1; /* in FireFox */ 
+    filter: alpha(opacity=40); /* in IE */
+    pointer-events: none;
+  }
+
+  ::ng-deep  ng-select {
+    background-color:#EFEFEF;
+  /*  top: 0px;
+    left: 0px; */
+    opacity: 1; /* in FireFox */ 
+    filter: alpha(opacity=40); /* in IE */
+    pointer-events: none;
+  }
+
+  #froalaInput {
+    background-color:#EFEFEF;
+  /*  top: 0px;
+    left: 0px; */
+    opacity: 1; /* in FireFox */ 
+    filter: alpha(opacity=40); /* in IE */
+    pointer-events: none;
+  }
+
+  ::ng-deep #froalaInput {
+    background-color:#EFEFEF;
+  /*  top: 0px;
+    left: 0px; */
+    opacity: 1; /* in FireFox */ 
+    filter: alpha(opacity=40); /* in IE */
+    pointer-events: none;
+  }
+
+  .customdisable {
+    visibility: hidden;
+  }
+
+  ::ng-deep .customdisable {
+    visibility: hidden;
+  }
+
+  .customhidden {
+    display: none;
+  }
+
+  ::ng-deep .customhidden {
+    display: none;
+  }

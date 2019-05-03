@@ -1,0 +1,69 @@
+<div class="app-body">
+  <div class="sidebar content-sidebar">
+    <nav class="sidebar-nav content-sidebar-nav" style="background-color:#2D3840;">
+      <ul class="nav contnet-nav">
+        <li class="nav-title">
+          <h5 style="float:left;color:#EBE9EB;">Students</h5>
+          <!-- <span style="float:right;color:#00A9B6;text-transform:none;">Create New Course</span> -->
+          <div style="padding-top:10px;">
+          </div>
+        </li>
+        
+        <!-- <li routerLinkActive="active" class="nav-title" *ngFor="let student of guardians | filter:['name', filter_name]">
+          <span (click)="studentSelected(student.student)" style="float:left;color:#EBE9EB; cursor:pointer;">{{student.student.full_name}}</span>
+        </li> -->
+        <li class="nav-item nav-dropdown" routerLinkActive="open" *ngFor="let student of guardians | filter:['name', filter_name]"
+          appNavDropdown>
+          <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle> {{student.student.full_name}}</a>
+          <ul class="nav-dropdown-items">
+            <li class="nav-item" routerLinkActive="active" *ngFor="let section of student.student.section_students
+">
+              <a class="nav-link" (click)="sectionSelected(section)">{{section.section.course.name}}</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div class="container-fluid">
+    <main class="main content-main" *ngIf="!isStudentSelected" style="background-color:white; height:95vh;">
+      <div class="container-fluid text-center" style="padding-top: 260px;">
+        <h1>
+          Select a student from the list!
+        </h1>
+      </div>
+    </main>
+    <main class="main content-main" *ngIf="isStudentSelected" style="background-color:white; height:95vh;">
+      <div class="container-fluid text-center" style="padding-top: 100px;">
+        <div class = "row">
+          <div class = "col-sm-4">
+            <div class = "card" style="height: 170px;">
+              <div class = "card-body">
+                <button class="btn btn-primary" style="margin: 50px;" (click)="gotToRoute('circumplex')">Circumplex</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card" style="height: 170px;">
+              <div class="card-body">
+                <button class="btn btn-primary" style="margin: 50px;" (click)="gotToRoute('report')">Progress Repport</button>&nbsp; &nbsp; &nbsp;
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card" style="height: 170px;">
+              <div class="card-body">
+                <button class="btn btn-primary" style="margin: 50px;" (click)="gotToRoute('evidence')">Evidences</button>&nbsp; &nbsp; &nbsp;
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <button class = "btn btn-primary" (click)= "gotToRoute('circumplex')">Circumplex</button>&nbsp; &nbsp; &nbsp; -->
+        <!-- <button class="btn btn-primary" (click)= "gotToRoute('report')">Progress Repport</button>&nbsp; &nbsp; &nbsp; -->
+        <!-- <button class="btn btn-primary" (click)= "gotToRoute('evidence')">Evidences</button>&nbsp; &nbsp; &nbsp; -->
+      </div>
+    </main>
+    <!-- <router-outlet></router-outlet> -->
+  </div>
+  <!-- Main content -->
+</div>

@@ -1,0 +1,154 @@
+<div *ngIf = "!reflectionSubcategoryId" class="card">
+  <div class="card-header">
+    REFLECTIONS
+    <button class="pull-right btn btn-primary customdisable" (click)="showReflection()" *ngIf="!collapseBtn">ADD</button>
+    <button class="pull-right btn btn-primary " (click)="hideReflection()" *ngIf="collapseBtn">COLLAPSE</button>
+  </div>
+  <div class="card-body">
+    <div *ngIf="reflection" class="card">
+      <div class="card-body">
+        <div class="form-group row">
+          <div class="col-md-12">
+            <!-- <textarea class="form-control" [(ngModel)]="reflection_text" id="discription" name="discription" rows="9"></textarea> -->
+            <div id="froalaInput" name="froalaInput" [froalaEditor]="editoroptions" [(froalaModel)]="reflection_text"></div>
+            <input id="hiddenInput" name="hiddenInput" type="hidden" required [(ngModel)]="reflection_text" />
+          </div>
+        </div>
+
+        <button [disabled] = '!reflection_text' (click)="saveReflection()" class="btn btn-primary customdisable">Save Reflection</button>
+      </div>
+    </div>
+    <div *ngIf="reflections && reflections.length !== 0">
+
+      <accordion >      
+        <accordion-group *ngFor="let reflection_source of JSObject.keys(reflections)">
+          <div accordion-heading class="clearfix" style="cursor:pointer;">
+            <h6>
+              <strong>{{reflection_source}}</strong>
+              <span class="badge badge-pill badge-success float-right">{{reflections[reflection_source].length}}</span>
+            </h6>
+          </div>
+          <accordion>
+            <accordion-group #group *ngFor="let reflection of reflections[reflection_source]; let i=index">
+              <div accordion-heading class="clearfix" style="cursor:pointer;">
+                <strong [innerHtml]="reflection.card_title"></strong>
+                &nbsp;&nbsp;&nbsp; By &nbsp;&nbsp;
+                <strong class="flex-unordered">{{reflection.created_by}}</strong>
+                <small class="flex-last" style="float:right;">{{reflection.created | date:'mediumDate'}}</small>
+              </div>
+              <div class="col-md-12" style="padding-bottom:4px;">
+                <div class="pull-right">
+                  <button type="button" (click)="openEdit(reflection_source, reflection.id)" class="btn btn-warning btn-sm icon">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                  <button type="button" (click)="deleteReflection(reflection.id)" class="btn btn-danger btn-sm icon customdisable">
+                    <i class="fa fa-trash-o"></i>
+                  </button>
+                </div>
+              </div>
+              <div [innerHtml] = "reflection.description">
+              </div>
+            </accordion-group>
+          </accordion>
+        </accordion-group>
+      </accordion>
+
+      <!-- <accordion *ngIf = "reflectionSubcategoryId">
+        <accordion-group *ngFor="let reflection_source of JSObject.keys(reflections)">
+          <div accordion-heading class="clearfix" style="cursor:pointer;">
+            <h6>
+              {{title}}
+            </h6>
+          </div>
+          <accordion>
+            <ng-container *ngFor="let reflection of reflections[reflection_source]; let i=index">
+              <accordion-group #group *ngIf="reflection.reflection_subcategory_id == reflectionSubcategoryId">
+                <div accordion-heading class="clearfix" style="cursor:pointer;">
+                  <strong>{{reflection.card_title}}</strong>
+                  &nbsp;&nbsp;&nbsp; By &nbsp;&nbsp;
+                <strong class="flex-unordered">{{reflection.created_by}}</strong>
+                <small class="flex-last" style="float:right;">{{reflection.created | date:'mediumDate'}}</small>
+              </div>
+              <div class="col-md-12" style="padding-bottom:4px;">
+                <div class="pull-right">
+                  <button type="button" (click)="openEdit(reflection_source, reflection.id)" class="btn btn-warning btn-sm icon">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                  <button type="button" (click)="deleteReflection(reflection.id)" class="btn btn-danger btn-sm icon">
+                    <i class="fa fa-trash-o"></i>
+                  </button>
+                </div>
+              </div>
+              <div [innerHtml]="reflection.description">
+              </div>
+            </accordion-group>
+          </ng-container>
+          </accordion>
+        </accordion-group>
+
+      </accordion> -->
+    </div>
+  </div>
+</div>
+
+
+<!-- If subcategory Id -->
+
+<div *ngIf = "reflectionSubcategoryId" class="card">
+  <div class="card-header">
+    <button class="pull-right btn btn-primary customdisable" (click)="showReflection()">ADD</button>
+    {{title}}
+  </div>
+  <div class="card-body">
+    <div *ngIf="reflection" class="card">
+      <div class="card-body">
+        <div class="form-group row">
+          <div class="col-md-12">
+            <!-- <textarea class="form-control" [(ngModel)]="reflection_text" id="discription" name="discription" rows="9"></textarea> -->
+            <div id="froalaInput" name="froalaInput" [froalaEditor]="editoroptions" [(froalaModel)]="reflection_text"></div>
+            <input id="hiddenInput" name="hiddenInput" type="hidden" required [(ngModel)]="reflection_text" />
+          </div>
+        </div>
+
+        <button (click)="saveReflection()" class="btn btn-primary customdisable">Save Reflection</button>
+      </div>
+    </div>
+    <div *ngIf="reflections && reflections.length !== 0">
+      <accordion *ngIf="reflectionSubcategoryId">
+        <accordion-group *ngFor="let reflection_source of JSObject.keys(reflections)">
+          <div accordion-heading class="clearfix" style="cursor:pointer;">
+            <h6>
+              REFLECTIONS
+              <!-- <span class="badge badge-pill badge-success float-right">{{reflections[reflection_source].length}}</span> -->
+            </h6>
+          </div>
+          <accordion>
+            <ng-container *ngFor="let reflection of reflections[reflection_source]; let i=index">
+              <accordion-group #group *ngIf="reflection.reflection_subcategory_id == reflectionSubcategoryId">
+                <div accordion-heading class="clearfix" style="cursor:pointer;">
+                  <strong>{{reflection.card_title}}</strong>
+                  &nbsp;&nbsp;&nbsp; By &nbsp;&nbsp;
+                  <strong class="flex-unordered">{{reflection.created_by}}</strong>
+                  <small class="flex-last" style="float:right;">{{reflection.created | date:'mediumDate'}}</small>
+                </div>
+                <div class="col-md-12" style="padding-bottom:4px;">
+                  <div class="pull-right">
+                    <button type="button" (click)="openEdit(reflection_source, reflection.id)" class="btn btn-warning btn-sm icon">
+                      <i class="fa fa-edit"></i>
+                    </button>
+                    <button type="button" (click)="deleteReflection(reflection.id)" class="btn btn-danger btn-sm icon customdisable">
+                      <i class="fa fa-trash-o"></i>
+                    </button>
+                  </div>
+                </div>
+                <div [innerHtml]="reflection.description">
+                </div>
+              </accordion-group>
+            </ng-container>
+          </accordion>
+        </accordion-group>
+
+      </accordion>
+    </div>
+  </div>
+</div>

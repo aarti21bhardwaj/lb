@@ -1,0 +1,81 @@
+<div class="spinner" *ngIf="spinnerEnabled"></div>
+<div *ngIf="!spinnerEnabled">
+<ol class="breadcrumb">
+  <li>
+    <div class="list-group">
+      <div class="list-group-item-action flex-column align-items-start">
+        <h5 class="mb-1">
+          <strong>ELEMENT OF SUCCESS</strong>
+        </h5>
+      </div>
+    </div>
+    <!-- .list-group ends here  -->
+  </li>
+</ol>
+
+<div class = "card">
+  <div class= "card-body">
+
+    <app-unitcontent [courseId]= courseId [unitId]= unitId [categoryId]= understandingCatId [commonContents]= commonUnderstandings [unitSpecificContents]=
+      unitUnderstandings>
+    </app-unitcontent>
+    
+    <app-unitcontent [courseId]= courseId [unitId]= unitId [categoryId]= QuestionCatId [commonContents]= commonQuestions [unitSpecificContents]=
+      unitQuestions>
+    </app-unitcontent>
+    
+    <app-tree-unit-content [courseId]= courseId [unitId]= unitId [categoryId]= commonSkillId [commonContents]= commonSkills [unitSpecificContents]=
+     unitSkills [showTableflag] = "true"></app-tree-unit-content>
+    <!-- Technology skill and approach description -->
+    <!-- <div class="card">
+      <div class="card">
+        <div class="card-header">
+            <strong> What key skills will drive their learning and help them to identify the ways in which they will demonstrate their learning
+              ?
+            </strong>
+        </div>
+      <div class="card-body">
+        <div class="form-group row">
+          <div class="col-md-12">
+            <div class="form-group row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <strong>Common Technology Skills & Approaches</strong>
+                  </div>
+                  <div class="card-body">
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        <div class="card">
+          <div class="card-header">
+            <strong>Unit Specific Technology Skill & Approach Description</strong>
+            <div class="pull-right">
+              <button class="btn btn-primary" type="button" (click)="newApproach()">Add</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div *ngIf="approach" class="card">
+              <div class="card-body">
+                <div class="form-group row">
+                  <div class="col-md-12">
+                    <label class="form-control-label" for="select">ADD UNIT APPROACH</label>
+                    <textarea class="form-control" id="discription" name="discription" rows="9"></textarea>
+                  </div>
+                </div>
+                <button (click)="addUnitApproach()" class="btn btn-primary">Add Unit Approach</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+      </div>
+    </div> -->
+  </div>
+</div>
+</div>

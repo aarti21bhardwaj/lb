@@ -1,0 +1,16 @@
+<div class = "card">
+  <div class = "card-header">
+    <strong>{{ title }}</strong>
+  </div>
+  <div class = "card-body">
+    <div style="text-align:center">
+      <strong>{{ treeTitle }}</strong>
+    </div>
+    <tree-root #tree [nodes]="impacts">
+      <ng-template #treeNodeTemplate let-node="node" let-index="index">
+        <input *ngIf="node.data.selectable" id="impacts_{{node.data.id}}" (change)="check(node, !node.data.checked)"
+          type="checkbox" [indeterminate]="node.data.indeterminate" [checked]="node.data.checked || checkSelectedNode(node.data) "> {{ node.data.name }}
+      </ng-template>
+    </tree-root>
+  </div>
+</div>

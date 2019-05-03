@@ -1,0 +1,79 @@
+<link rel="stylesheet" [href]='sanitizer.bypassSecurityTrustResourceUrl(cssUrl)'>
+<div class="app-body">
+  <div class="sidebar content-sidebar">
+    <nav class="sidebar-nav content-sidebar-nav">
+      <ul class="nav contnet-nav">
+        <li class="nav-title">
+          <span style="float:left;color:#4D5462;" [routerLink]="['/foundation/courses',courseId]">Back to Course: </span>
+        </li>
+        <li class="divider"></li>
+        <li  [ngClass]="{'active': isMetaUnitActive == true}"  [routerLink]="['/foundation/courses',courseId,'units','transfer',unitId]" class="nav-title">
+          <span  style="float:left;color:#4D5462;">Meta Unit</span>
+        </li>
+  
+        <li routerLinkActive="active" [routerLink]="['/foundation/courses',courseId,'units','transfer',unitId,'performance-task']" class="nav-title">
+          <span  style="float:left;color:#4D5462;">Transfer/Performance Task</span>
+        </li>
+
+        <li routerLinkActive="active" [routerLink]="['/foundation/courses',courseId,'units','transfer',unitId,'success-elements']" class="nav-title">
+          <span  style="float:left;color:#4D5462;">Essential Elements Of Success</span>
+        </li>
+
+        <li routerLinkActive="active" [routerLink]="['/foundation/courses',courseId,'units','transfer',unitId,'learning-experiences']" class="nav-title">
+          <span  style="float:left;color:#4D5462;">Learning Experiences</span>
+        </li>
+
+        <li routerLinkActive="active" [routerLink]="['/foundation/courses',courseId,'units','transfer',unitId,'transfer-resources-reflections']" class="nav-title">
+          <span style="float:left;color:#4D5462;">Resources and Reflections</span>
+        </li>
+
+
+      </ul>
+    </nav>
+  </div>
+  <!-- Main content -->
+  <main class="main content-main " *ngIf="!spinnerEnabled">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-8">
+          <router-outlet ></router-outlet>
+        </div>
+        <!-- .col-md-4 central div ends here-->
+        <div *ngIf = "courseDetails" class="col-md-4">
+        <ol class="breadcrumb">
+          <li>
+            <div class="list-group">
+              <div class="list-group-item-action flex-column align-items-start">
+                <h5 class="mb-1">
+                  <strong>{{courseDetails.name}}</strong>
+                </h5>
+              </div>
+            </div>
+            <!-- .list-group ends here  -->
+          </li>
+        </ol>
+          <div class="card">
+            <div class="card-header">
+              <strong>Unit Summary</strong>
+              <span class="pull-right">
+                <button (click) = "toggleSummary()" class="btn btn-sm btn-primary">{{summaryToggleButtonText}}</button>
+              </span>
+            </div>
+            <div *ngIf = "unitData" class="breadcrumb">
+              <strong>{{unitData.name}}</strong>
+            </div>
+            <div *ngIf="!hideSummary" class="card-body">
+              <app-common-content-unit-summary *ngIf = "understandingId"  [courseId]= courseId [unitId]= unitId [categoryId]= understandingId [commonContents] = commonUnderstandings></app-common-content-unit-summary>
+              <app-common-content-unit-summary *ngIf="questionId"  [courseId]= courseId [unitId]= unitId [categoryId]= questionId [commonContents] = commonQuestions
+                ></app-common-content-unit-summary>
+              <app-common-content-unit-summary *ngIf="skillId" [courseId]= courseId [unitId]= unitId [categoryId]= skillId [commonContents] = commonSkills
+                ></app-common-content-unit-summary>
+                <app-unit-summary [isExpanded] = summaryExpanded [courseId]= courseId [unitId]= unitId title="Performance Tasks" assessmentTypeId="5" type="Assessment"></app-unit-summary>
+                <app-unit-summary [isExpanded] = summaryExpanded [courseId]= courseId [unitId]= unitId title="Learning Experiences" assessmentTypeId="4" type="Assessment"></app-unit-summary>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

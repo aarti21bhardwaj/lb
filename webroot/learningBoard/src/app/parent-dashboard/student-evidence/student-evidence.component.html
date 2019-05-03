@@ -1,0 +1,121 @@
+<div class="app-body">
+<div class="sidebar content-sidebar">
+  <nav class="sidebar-nav content-sidebar-nav">
+    <ul class="nav content-nav">
+      <li class="nav-title">
+        <!-- <span style="float:left;color:#4D5462;" [routerLink]="['/analytics']">Back to Analytics: </span> -->
+        <button class="btn btn-primary" [routerLink]="['/parent-dashboard']">
+          <i class="fa fa-toggle-left" style="font-size:20px"></i> Back to Dashboard</button>
+        <!-- <span style="float:right;color:#00A9B6;text-transform:none;">Create New Course</span> -->
+
+      </li>
+    </ul>
+  </nav>
+</div>
+
+  <div class="main content-main" *ngIf="!addActive">
+    <div class="container-fluid" style="margin-top:30px;">
+      <div class="animated fadeIn">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-header">
+                <div class="row">
+                  <div class="col-md-7">
+                    <h5>
+                      <strong>
+                        Evidence List
+                      </strong>
+                    </h5>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body" *ngIf="evidences && evidences.length !== 0">
+                <div class="card" *ngFor="let evidence of evidences | deepFilter:['impact_and_course_names', filter_elment]">
+                  <div class="card-header">
+                    <div class="row">
+                      <h6 class="col-md-7">
+                        <strong>
+                          {{evidence.title}}
+                        </strong>
+                      </h6>
+                      <small class="col-md-2">{{evidence.created | date:'mediumDate'}}</small>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <span class="row">
+                      <strong class="col-md-2">Description: </strong>
+                      <p class="col-md-10"> {{evidence.description}}</p>
+                    </span>
+                    <span class="row" *ngIf="evidence.file_name">
+                      <strong class="col-md-2">File: </strong>
+                      <span class="col-md-10">
+                        <p>
+                          {{evidence.file_name}}
+                          <a target="_new" href="{{evnEndpoint}}{{evidence.file_path}}{{ evidence.file_name }}" class="btn btn-success">
+                            <i class="fa fa-download"></i>
+                          </a>
+                        </p>
+                      </span>
+                    </span>
+                    <span class="row" *ngIf="evidence.url">
+                      <strong class="col-md-2">Link: </strong>
+                      <span class="col-md-10">
+
+
+                        <a target="_new" href="{{ evidence.url }}">
+                          {{evidence.url}}
+                        </a>
+
+                      </span>
+                    </span>
+                    <span class="row" *ngIf="evidence.reflection_description">
+                      <strong class="col-md-2">Reflection: </strong>
+                      <p class="col-md-10">{{evidence.reflection_description}}</p>
+                    </span>
+                    <span class="row" *ngIf="evidence.reflection_file_name">
+                      <strong class="col-md-2">Reflection File: </strong>
+                      <span class="col-md-10">
+                        <p>
+                          {{evidence.reflection_file_name}}
+                          <a target="_new" href="{{evnEndpoint}}{{evidence.reflection_file_path}}{{ evidence.reflection_file_name }}" class="btn btn-success">
+                            <i class="fa fa-download"></i>
+                          </a>
+                        </p>
+                      </span>
+                    </span>
+                    <span class="row">
+                      <strong class="col-md-2">Courses: </strong>
+                      <p class="col-md-10">
+                        <span style="white-space:normal" *ngFor="let section of evidence.evidence_sections, let isLast=last">{{section.section.course.name}}{{isLast ? '' : ', '}}</span>
+                      </p>
+                    </span>
+                    <span class="row" *ngIf="evidence.evidence_impacts.length !== 0">
+                      <strong class="col-md-2">Impacts: </strong>
+                      <!-- <p class="col-md-10"> -->
+                      <ul class="col-md-10">
+                        <li *ngFor="let impact of evidence.evidence_impacts">
+                          <span>{{impact.impact.name}} : {{impact.evidence_impact_score ? impact.evidence_impact_score.scale_value.name : "Not Assessed"}}</span>
+                        </li>
+                      </ul>
+                    </span>
+                    <span class="row" *ngIf="evidence.evidence_contexts.length !== 0">
+                      <strong class="col-md-2">Contexts: </strong>
+                      <p class="col-md-10">
+                        <span style="white-space:normal" *ngFor="let context of evidence.evidence_contexts, let isLast=last">{{context.context.name}}{{isLast ? '' : ', '}}</span>
+                      </p>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body" *ngIf="evidences && evidences.length == 0">
+                <h6>No evidences added yet.</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,74 @@
+<div *ngIf="unitId && courseId">
+    <ol class="breadcrumb">
+        <li>
+            <div class="list-group">
+                <div class="list-group-item-action flex-column align-items-start">
+                    <h5 class="mb-1">
+                        <strong>REFLECTIONS</strong>
+                    </h5>
+                </div>
+            </div>
+            <!-- .list-group ends here  -->
+        </li>
+    </ol>
+    <div class="card">
+        <div class="card-header">
+            <strong>To what extent did we achieve our purpose?</strong>
+        </div>
+        <div class="card-body">
+            <app-reflections-directive [courseId]="courseId" [unitId]="unitId" [reflectionSubcategoryId]="1" title = "How could you improve on the assessment task(s) so that you would have a more accurate picture of each student's understanding
+            of the central idea?"> </app-reflections-directive>
+            <app-reflections-directive [courseId]="courseId" [unitId]="unitId" [reflectionSubcategoryId]="2" title = "What was the evidence that connections were made between the central idea and the transdisciplinary theme?"> </app-reflections-directive>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <strong>To what extent did we include the elements of the PYP?</strong>
+        </div>
+        <div class="card-body">
+            <app-reflections-directive [courseId]="courseId" [unitId]="unitId" [reflectionSubcategoryId]="3" title= "Develop an understanding of the concepts identified in 'What do we want to learn?'"> </app-reflections-directive>
+            <app-reflections-directive [courseId]="courseId" [unitId]="unitId" [reflectionSubcategoryId]="4" title= "Demonstrate the learning and application of particular transdisciplinary skills?">
+            </app-reflections-directive>
+            <app-reflections-directive [courseId]="courseId" [unitId]="unitId" [reflectionSubcategoryId]="5" title= "Develop particular attributes of the learner profile and/or attitudes?">
+            </app-reflections-directive>
+            <div class="card">
+                <div class="card-header">
+                    What student-initiated inquiries arose from the learning?
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <!-- <textarea class="form-control" [(ngModel)]="reflection_text" id="discription" name="discription" rows="9"></textarea> -->
+                            <div id="froalaInput" name="froalaInput" [froalaEditor]="editoroptions" [(froalaModel)]="initiatedInqDes"></div>
+                            <input id="hiddenInput" name="hiddenInput" type="hidden" required [(ngModel)]="initiatedInqDes" />
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button *ngIf="showInquiryAdd" class="btn btn-primary pull-right customdisable" (click)="saveReflection('inquiries')"> Save</button>
+                    <button *ngIf="showInquiryEdit" class="btn btn-primary pull-right customdisable" (click)="editReflection('inquiries')"> Edit</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    What student-initiated actions arose from the learning?
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <!-- <textarea class="form-control" [(ngModel)]="reflection_text" id="discription" name="discription" rows="9"></textarea> -->
+                            <div id="froalaInput" name="froalaInput" [froalaEditor]="editoroptions" [(froalaModel)]="initiatedActionDes"></div>
+                            <input id="hiddenInput" name="hiddenInput" type="hidden" required [(ngModel)]="initiatedActionDes" />
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button *ngIf="showactionAdd" class="btn btn-primary pull-right customdisable" (click)="saveReflection('actions')"> Save</button>
+                    <button *ngIf="showActionEdit" class="btn btn-primary pull-right customdisable" (click)="editReflection('actions')"> Edit</button>
+                </div>
+            </div>
+            <app-reflections-directive [courseId]="courseId" [unitId]="unitId" [reflectionSubcategoryId]="6" title="Teacher Notes">
+            </app-reflections-directive>
+        </div>
+    </div>
+</div>

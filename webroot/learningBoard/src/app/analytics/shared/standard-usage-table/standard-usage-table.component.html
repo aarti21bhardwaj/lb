@@ -1,0 +1,65 @@
+<div class = "card">
+  <div class = "card-header">
+    <strong>Standards</strong>
+  </div>
+  <div class = "card-body" *ngIf="!categories">
+    <p>Insufficient Data</p>
+  </div>
+  <div class = "card-body">
+    <div *ngIf="categories" class="row">
+      <div class="col-sm-5">
+        <label>Select Strand</label>
+      </div>
+      <div class="col-sm-7">
+        <ng-select [items]="categories" (data)="refreshValue($event)" (selected)="selected($event)" (removed)="removed($event)" placeholder="Select Strand to display unit standards"></ng-select>
+      </div>
+    </div>
+    &nbsp; &nbsp;
+    <div *ngIf="tableData && tableData.length !== 0" class="card">
+      <div class="card-header">
+        <strong>Standards</strong>
+      </div>
+      <div class="card-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Standard Code</th>
+              <th>Standard Name</th>
+              <th *ngIf="assessmentTypes.indexOf('formative_assessments') > -1">Formative Assessments</th>
+              <th *ngIf="assessmentTypes.indexOf('summative_assessments') > -1">Summative Assessments</th>
+              <th *ngIf="assessmentTypes.indexOf('learning_activities') > -1">Learning Activities</th>
+              <th *ngIf="assessmentTypes.indexOf('learning_experiences') > -1">Learning Experiences</th>
+              <th *ngIf="assessmentTypes.indexOf('performance_tasks') > -1">Performance Tasks</th>
+              <th>Units</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let  data of tableData; let i=index">
+              <td>{{data.standard_code}}</td>
+              <td>
+                <p [ngStyle]="{'height': isCollapsed[data.id]? '150px' : '40px', 'overflow-y': isCollapsed[data.id]? 'scroll' : 'hidden'}">
+                   {{data.standard_name}}
+                </p>
+                <a *ngIf="!isCollapsed[data.id]" (click)="isCollapsed[data.id] = true" style="color:blue">Read more</a>
+                <a *ngIf="isCollapsed[data.id]" (click)="isCollapsed[data.id] = false" style="color:blue">Read less</a>
+              </td>
+              <td *ngIf="assessmentTypes.indexOf('formative_assessments') > -1">{{data.formative_assessments}}</td>
+              <td *ngIf="assessmentTypes.indexOf('summative_assessments') > -1">{{data.summative_assessments}}</td>
+              <td *ngIf="assessmentTypes.indexOf('learning_activities') > -1">{{data.learning_activities}}</td>
+              <td *ngIf="assessmentTypes.indexOf('learning_experiences') > -1">{{data.learning_experiences}}</td>
+              <td *ngIf="assessmentTypes.indexOf('performance_tasks') > -1">{{data.performance_tasks}}</td>
+              <td *ngIf = "data.units">
+                <p [ngStyle]="{'height': isCollapsed[data.id]? '150px' : '40px', 'overflow-y': isCollapsed[data.id]? 'scroll' : 'hidden'}">
+                  {{data.units}}
+                </p>
+                <a *ngIf="!isCollapsed[data.id]" (click)="isCollapsed[data.id] = true" style="color:blue">Read more</a>
+                <a *ngIf="isCollapsed[data.id]" (click)="isCollapsed[data.id] = false" style="color:blue">Read less</a>
+              </td>
+              <td *ngIf = "!data.units">N/A</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,130 @@
+<div class="row">
+<div class="app-body">
+    <div class="col-sm-2">
+        <div class="sidebar">
+            <nav class="sidebar-nav">
+                <ul class="nav">
+                    <li class="nav-title">
+                        My Courses
+                    </li>
+                    <li>
+                        <div class="col-sm-12" style="padding-bottom:10px">
+                            <input class="form-control" type="text" name="title" [(ngModel)]="filter_name" placeholder="Enter course name">
+                        </div>
+                    </li>
+                    <li class="nav-item nav-dropdown" routerLinkActive="open" *ngFor="let course of courses | filter:['name', filter_name]" appNavDropdown>
+                        <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle> {{course.name}}-Grade {{course.grade.name}}</a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item" *ngFor="let section of course.sections">
+                                <a class="nav-link" (click)="sectionSelected(section.id)" routerLink='{{section.id}}'>{{section.name}} {{section.teacher ? '| '+section.teacher.full_name : ''}}</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="col-sm-10 mb-4">
+        <div *ngIf="selected_section_id" class="row" style="padding: 15px;">
+            <div class="col-sm-11">
+                <ol class="breadcrumb">
+                    <li>
+                        <div *ngIf="courses" class="list-group">
+                            <div class=" list-group-item list-group-item-action flex-column align-items-start">
+                                <div class="row">
+                                    <button *ngIf ="courseId" class="btn btn-primary" [routerLink]="['/foundation/courses', courseId]">Go to Foundation</button>
+                                    &nbsp;
+                                    <button *ngIf ="courseId" class="btn btn-primary" [routerLink]="['/teaching-hub', courseId, selected_section_id]">Go To Teaching Hub</button>
+                                    &nbsp;
+                                    <button class="btn btn-primary" [routerLink]="['/reports/section', selected_section_id]">Go To Reports</button>
+                                    &nbsp;
+                                    <button *ngIf ="courseId" class="btn btn-primary" [routerLink]="['/analytics/course-map',courseId]">
+                                        Go To Course Map
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- .list-group ends here  -->
+                    </li>
+                </ol>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="text-center">
+                            Assessments
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="col-sm-12" *ngIf="evaluations && evaluations.length != 0">
+                            <span *ngFor="let key of keys" class="label col-sm-2" [style.background-color]="showAssessmentTypes[key].color">{{showAssessmentTypes[key].name}}</span>
+                            
+                        </div>
+
+                        <tabset *ngIf="evaluations && evaluations.length != 0">
+                            <tab heading="Active">
+                                <table class="table table-stripped">
+                                    <thead>
+                                        <tr>
+                                            <th>Assessment Name</th>
+                                            <th>Description</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let evaluation of evaluations" [style.background-color]="evaluation.assessment.assessment_type.color">
+                                            <ng-container *ngIf="!evaluation.is_archived">
+                                                <td>{{evaluation.assessment.name}}</td>
+                                                <td [innerHtml]="evaluation.assessment.description"></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-success" routerLink='assessment/{{evaluation.id}}'>Take me there</button>
+                                                    <button class="btn btn-sm btn-warning" (click)="archiveEvaluation(evaluation.id)">Archive</button>                                                    
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </tab>
+                            <tab heading="Archived">
+                                <table class="table table-stripped">
+                                    <thead>
+                                        <tr>
+                                            <th>Assessment Name</th>
+                                            <th>Description</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let evaluation of evaluations" [style.background-color]="evaluation.assessment.assessment_type.color">
+                                            <ng-container *ngIf="evaluation.is_archived">
+                                                <td>{{evaluation.assessment.name}}</td>
+                                                <td>{{evaluation.assessment.description}}</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-success" routerLink='assessment/{{evaluation.id}}'>Take me there</button>
+                                                    <button class="btn btn-sm btn-warning" (click)="archiveEvaluation(evaluation.id)">Unarchive</button>
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </tab>
+                        </tabset>
+                        <div *ngIf="!evaluations || evaluations.length == 0">
+                            <h4 class="text-center">
+                                No assessments found for this section.
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!selected_section_id" style="background-color:white; height:93vh; max-width:100%;">
+            <div class="container-fluid text-center" style="padding-top: 320px;">
+                <h1>
+                    Select a section from the list!
+                </h1>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- Main content -->
+    <!-- <router-outlet></router-outlet> -->
+</div>

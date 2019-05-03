@@ -1,0 +1,16 @@
+ li.nav-title.active {
+    background-color: lightblue;
+}
+
+.ui-select-match-item.btn{
+  padding: 0px;
+}
+ 
+ ::ng-deep input {
+  background-color:#EFEFEF;
+  /*  top: 0px;
+    left: 0px; */
+    opacity: 1; /* in FireFox */ 
+    filter: alpha(opacity=40); /* in IE */
+    pointer-events: none;
+  }

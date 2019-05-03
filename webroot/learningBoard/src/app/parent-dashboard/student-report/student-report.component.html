@@ -1,0 +1,187 @@
+<!-- <div id="result"></div> -->
+
+<div class="app-body">
+  <div class="sidebar content-sidebar">
+    <nav class="sidebar-nav content-sidebar-nav">
+      <ul class="nav contnet-nav">
+        <li class="nav-title">
+          <!-- <span style="float:left;color:#4D5462;" [routerLink]="['/analytics']">Back to Analytics: </span> -->
+          <button class="btn btn-primary" [routerLink]="['/parent-dashboard']">
+            <i class="fa fa-toggle-left" style="font-size:20px"></i> Back to Dashboard</button>
+          <!-- <span style="float:right;color:#00A9B6;text-transform:none;">Create New Course</span> -->
+
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <main class="main content-main ">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="spinner" *ngIf="spinnerEnabled"></div>
+          <div class="card" *ngIf="!spinnerEnabled && showSplineChart">
+            <div class="card-body">
+              <button aria-label="Close" (click)="closeChart()" class="pull-right btn btn-primary" type="button">
+                <span aria-hidden="true">X</span>
+              </button>
+              <div id="splinechart"></div>
+            </div>
+          </div>
+          <div *ngIf="!spinnerEnabled" class="card">
+            <div class="card-header">
+              <strong>Student Progress</strong>
+            </div>
+            <div class="card-body" *ngIf="noData">
+              <p>Insufficient Data</p>
+            </div>
+            <div *ngIf="assessmentType.length > 0" class="card-body">
+              <div class="row">
+                <div class="col-md-4">
+                  <input class='with-gap' name='type' type='radio' [ngModel]="getAssessmentType" value='all' (click)="getTable('all')" />
+                  <label>All</label>
+                </div>
+                <div class="col-md-4" *ngFor="let type of assessmentType; let indx = index">
+                  <input class='with-gap' name='type' type='radio' [id]='type' [value]='type' (click)="getTable(type)" />
+                  <label [for]='type'>{{type}}</label>
+                </div>
+              </div>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Total Count</th>
+                    <th>Graph</th>
+                    <th>View</th>
+                    <th>Units</th>
+                    <th>Evaluation</th>
+                  </tr>
+                </thead>
+                <ng-container *ngFor="let assesType of chartData;">
+                  <tbody *ngIf="assesType.assessement_type == getAssessmentType">
+                    <ng-container *ngFor="let strand of assesType.data;">
+                      <tr>
+                        <td>{{strand.strand_code}}</td>
+                        <td>{{strand.strand_name}}</td>
+                        <td>{{strand.total_count}}</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                      </tr>
+                      <tr *ngFor="let standard of strand.data;">
+                        <td>{{standard.standard_code}}</td>
+                        <td>{{standard.standard_name}}</td>
+                        <td>{{standard.total_count}}</td>
+                        <td>
+                          <div [chart]="chartSparkline(standard.standard_id)"></div>
+                        </td>
+                        <td>
+                          <button type="button" (click)="viewSpline(standard.standard_id, standard.standard_name)" class="btn btn-warning btn-sm icon">
+                            <i class="fa fa-eye"></i>
+                          </button>
+                        </td>
+                        <td>
+                          <button type="button" (click)="openModel(unit, 'Units',standard.units)" class="btn btn-primary btn-sm icon">
+                            <i class="fa fa-gears"></i>
+                          </button>
+                        </td>
+                        <td>
+                          <button type="button" (click)="openModel(evaluation, 'Evaluations',standard.assessments)" class="btn btn-secondary btn-sm icon">
+                            <i class="fa fa-info"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                  <tbody *ngIf="getAssessmentType == 'all'">
+                    <ng-container *ngFor="let strand of assesType.data;">
+                      <tr>
+                        <td>{{strand.strand_code}}</td>
+                        <td>{{strand.strand_name}}</td>
+                        <td>{{strand.total_count}}</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                      </tr>
+                      <tr *ngFor="let standard of strand.data;">
+                        <td>{{standard.standard_code}}</td>
+                        <td>{{standard.standard_name}}</td>
+                        <td>{{standard.total_count}}</td>
+                        <td>
+                          <div [chart]="chartSparkline(standard.standard_id)"></div>
+                        </td>
+                        <td>
+                          <button type="button" *ngIf="showViewButton(standard.standard_id)" (click)="viewSpline(standard.standard_id, standard.standard_name)"
+                            class="btn btn-warning btn-sm icon">
+                            <i class="fa fa-eye"></i>
+                          </button>
+                        </td>
+                        <td>
+                          <button type="button" (click)="openModel(unit, 'Units',standard.units)" class="btn btn-primary btn-sm icon">
+                            <i class="fa fa-gears"></i>
+                          </button>
+                        </td>
+                        <td>
+                          <button type="button" (click)="openModel(evaluation, 'Evaluations',standard.assessments)" class="btn btn-secondary btn-sm icon">
+                            <i class="fa fa-info"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </ng-container>
+              </table>
+              <!-- </ng-container> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<ng-template #unit>
+  <div class="modal-header">
+    <h4 class="modal-title">Units</h4>
+    <button type="button" class="close" (click)="modalRef.hide()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ul *ngIf="units">
+      <li *ngFor="let unit of units">
+        <p>{{unit.name}}</p>
+      </li>
+    </ul>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Close</button>
+  </div>
+</ng-template>
+<ng-template #evaluation>
+  <div class="modal-header">
+    <h4 class="modal-title">Assessments</h4>
+    <button type="button" class="close" (click)="modalRef.hide()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <table *ngIf="assessmentData" class="table table-striped">
+      <tbody></tbody>
+      <tr *ngFor="let  assessment of assessmentData; let i=index">
+        <td>{{assessment.assessment}}</td>
+        <td>
+          <button type="button" (click)="modalRef.hide()" [routerLink]="['/feedback/assessment',assessment.evaluation_id,studentId]"
+            class="btn btn-warning btn-sm icon">
+            Go to Assessment
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Close</button>
+  </div>
+</ng-template>

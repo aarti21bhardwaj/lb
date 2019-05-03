@@ -1,0 +1,136 @@
+
+<!-- Main content -->
+<main class="main content-main" *ngIf = "courseDetails">
+  <div>
+    <ol class="breadcrumb">
+      <li>
+        <div class="list-group">
+          <div class=" list-group-item list-group-item-action flex-column align-items-start">
+            <div class="row">
+              <div class="col-7">
+                <div class="row">
+                  <h5 class="mb-1">
+                    <strong>{{courseDetails.name}}</strong>
+                  </h5>
+                </div>
+                <div class="row">
+                  <p class="course-desc" [innerHTML]="courseDetails.description | safe"></p>
+                </div>
+              </div>
+              <div class="col-5" style="padding-right:0px;">
+                <div class="row">
+                  <!-- <div style="text-align:right; margin-right:15px;">
+                        <strong>COURSE DURATION:&nbsp;</strong><span>22 Days</span>
+                      </div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- .list-group ends here  -->
+      </li>
+    </ol>
+    <div class="row">
+      <div class="col-md-8">
+        <span *ngIf="courseDetails && courseDetails.units && courseDetails.units.length !== 0">
+          <ng-container *ngFor="let unit of courseDetails.units;">
+            <div *ngIf="unit.is_archived" class="card">
+              <div class="card-header">
+                <strong>{{ unit.name}}</strong>
+                <!--  <span class="badge badge-pill badge-primary float-right">Duration: 8 days</span> -->
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-12">
+                    <p [innerHTML]="unit.description"></p>
+                  </div>
+                </div>
+                <div>
+                  <button class="btn btn-outline-primary" [routerLink]="['/foundation/courses', courseId,'units',unit.template.slug ,unit.id]" type="button">View Unit</button>
+                  <!-- <button class="btn btn-outline-primary" (click)="openModel(publish,'publish',unit)" type="button">Publish Unit</button> -->
+                  <button class="btn btn-outline-primary" (click)="openModel(copy,'copy',unit)" type="button">Copy Unit</button>
+                  <button class="btn btn-outline-primary" (click)="exportAsPdf(unit)" type="button">Export as PDF</button>
+                  <!-- <button class="btn btn-outline-primary" (click)="openModel(delete,'delete',unit)" type="button">Delete Unit</button> -->
+                  <!-- <button class="btn btn-outline-primary" [hidden]="true" (click)="archiveUnit(unit)" type="button">Archive Unit</button> -->
+                </div>
+              </div>
+            </div>
+            <!-- .card ends here-->
+          </ng-container>
+        </span>
+        <div class="card" *ngIf="courseDetails && !courseDetails.units">
+          <div class="card-header">
+            <strong>No units are archived for the selected term.</strong>
+            <!--  <span class="badge badge-pill badge-primary float-right">Duration: 8 days</span> -->
+          </div>
+        </div>
+      </div>
+      <!-- .col-md-4 central div ends here-->
+      <div class="col-md-4" *ngIf="courseDetails && courseDetails.units && courseDetails.units.length !== 0">
+        <div class="card">
+          <div class="card-header">
+            <h5>Totals
+              <span class="badge badge-pill badge-primary float-right">{{courseDetails.units.length}} Units</span>
+            </h5>
+          </div>
+          <div class="card-body">
+            <p *ngIf="courseDetails.performance_tasks">
+              <strong>{{courseDetails.performance_tasks}}</strong>&nbsp;&nbsp;
+              <small> Performance Tasks</small>
+            </p>
+            <p *ngIf="courseDetails.learning_experiences">
+              <strong>{{courseDetails.learning_experiences}}</strong>&nbsp;&nbsp;
+              <small> Learning Experiences</small>
+            </p>
+            <p *ngIf="courseDetails.formative_assessments">
+              <strong>{{courseDetails.formative_assessments}}</strong>&nbsp;&nbsp;
+              <small>{{labelFormative}}</small>
+            </p>
+            <p *ngIf="courseDetails.summative_assessments">
+              <strong>{{courseDetails.summative_assessments}}</strong>&nbsp;&nbsp;
+              <small>{{labelSummative}}</small>
+            </p>
+            <p *ngIf="courseDetails.reflections">
+              <strong>{{courseDetails.reflections}}</strong>&nbsp;&nbsp;
+              <small>Reflections</small>
+            </p>
+            <p *ngIf="courseDetails.resources">
+              <strong>{{courseDetails.resources}}</strong>&nbsp;&nbsp;
+              <small>Resources</small>
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <router-outlet></router-outlet>
+  </div>
+</main>
+
+<ng-template #copy>
+  <div class="modal-header">
+    <h4 class="modal-title">Copy Unit</h4>
+    <button type="button" class="close" (click)="modalRef.hide()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form action="" class="form-horizontal" enctype="multipart/form-data" method="post">
+      <div class="form-group row">
+        <label class="col-md-3 form-control-label" for="text-input">Unit Name</label>
+        <div class="col-md-9">
+          <input class="form-control" [(ngModel)]="copiedUnitName" id="text-input" name="text-input" placeholder="Introduction to unit"
+            type="text">
+          <span class="help-block">Provide a name for the unit</span>
+        </div>
+      </div>
+    </form>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Cancel</button>
+    <button type="button" class="btn btn-primary" [disabled]="!copiedUnitName" (click)="copyUnit(); modalRef.hide();">Save</button>
+  </div>
+</ng-template>
+

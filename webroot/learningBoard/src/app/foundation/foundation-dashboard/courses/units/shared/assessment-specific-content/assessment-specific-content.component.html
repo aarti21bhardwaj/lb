@@ -1,0 +1,8 @@
+<div class="form-group row">
+  <div class="col-md-12">
+    <div id="froalaInput" name="froalaInput" [froalaEditor]="editoroptions" [(froalaModel)]="description">
+    </div>
+    <input id="hiddenInput" name="hiddenInput" type="hidden" required [(ngModel)]="description" />
+  </div>
+</div>
+<button type="button" class=" btn btn-primary  pull-right customdisable" (click)="addAssessmentSpecific() ">Submit</button>

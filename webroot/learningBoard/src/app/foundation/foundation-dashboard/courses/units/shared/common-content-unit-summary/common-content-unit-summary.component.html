@@ -1,0 +1,21 @@
+<accordion *ngIf = "commonContents">
+  <accordion-group #group>
+    <div accordion-heading class="clearfix">
+      <strong>{{commonContents.meta.heading_1}}</strong>
+    </div>
+    <ul *ngIf= "checkedContents">
+      <li *ngFor="let content of checkedContents">
+        <span [innerHTML]="content.content_value.text | safe"></span>
+        <!-- <p [innerHTML]="content.content_value.text | safe"></p> -->
+      </li>
+    </ul>
+    <br>
+    <strong *ngIf="specificContents && specificContents.length > 0">{{commonContents.meta.heading_3}}</strong>
+    <ul *ngIf="specificContents && specificContents.length > 0">
+      <li *ngFor="let specific of specificContents">
+        <span [innerHTML]="specific.text | safe"></span>
+        <!-- <p [innerHTML]="specific.text | safe"></p> -->
+      </li>
+    </ul>
+  </accordion-group>
+</accordion>

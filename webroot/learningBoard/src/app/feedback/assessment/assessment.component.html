@@ -1,0 +1,267 @@
+<div class="app-body" *ngIf="assessment">
+  <!-- spinner -->
+  <div class="spinner" *ngIf="spinnerEnabled"></div>
+  
+  <!-- Main content ( Sidebar)-->
+  <main class="main content-main" [hidden]="spinnerEnabled">
+    <div class="container-fluid">
+      <ol class="breadcrumb">
+        <li>
+          <div class="list-group">
+            <div class=" list-group-item list-group-item-action flex-column align-items-start">
+              <div class="row">
+                <div class="col-12">
+                  <div class="row">
+                    <div class="col-4 text-center"></div>
+                    <h3>{{assessment.assessment.name}}</h3>
+                  </div>
+                  <div class="row">
+                    <div class="col-1">
+                      <img class="img-avatar" style="height: 50px;" src="{{student.image_url ? student.image_url : 'http://ts.twinspark.co/dev/learningboard/img/default-img.jpeg'}}">
+                    </div>
+                    <div class="col-4">
+                      <h5 class="mb-1" *ngIf="student">
+                        <strong>{{student.first_name}} {{student.middle_name}} {{student.last_name}}</strong>
+                      </h5>
+                    </div>
+                    <div class="col-2">
+                    </div>
+                    <!-- <div class="col-2">
+                      <button class="btn btn-success btn-block" (click)="beforeSave(0)">
+                        <strong>Save</strong>
+                      </button>
+                    </div> -->
+                    <div class="col-offset-2 col-3">
+                      <button *ngIf="assessment.evaluation_feedbacks.length == 0 || !assessment.evaluation_feedbacks[0].is_completed" class="btn btn-warning btn-block" (click)="beforeSave(1)">
+                        <strong>Mark Complete</strong>
+                      </button>
+                      <button *ngIf="assessment.evaluation_feedbacks.length != 0 && assessment.evaluation_feedbacks[0].is_completed" class="btn btn-success btn-block" disabled="disabled">
+                        <strong>Completed</strong>
+                        <i class="fa fa-check-circle fa-lg" style="color:#fff"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="col-6" style="padding-right:0px;">
+                  <div style="text-align:center;">                  
+                    <button class="btn btn-outline-primary col-5" type="button">Bulk Edit Feedback</button>
+                    <button class="btn btn-outline-primary col-3" type="button">Reset</button>                  
+                  </div>
+                </div> -->
+              </div>
+            </div>
+          </div>
+          <!-- .list-group ends here  -->
+        </li>
+      </ol>
+      
+      <!-- Center Div -->
+      <div class="row">
+        <div class="col-md-8">
+
+          <!-- Standards -->
+          <div class="card" *ngIf="standards">
+            <div class="card-header">
+              <strong>STANDARDS</strong>
+              <span class="badge badge-pill badge-primary float-right" (click)="standardRubric.show()">View Rubric</span>
+            </div>
+            <!-- .card starts here-->
+            <div class="card-body" *ngIf="standards.length !== 0">
+              <ng-container *ngFor="let strand of strands">
+                <div class="card" *ngIf="standards[strand.id] && standards[strand.id].length != 0">
+                  <div class="card-header">
+                    <h6>{{strand.name}}</h6>
+                  </div>
+                  <div class="card-body" *ngFor="let standard of standards[strand.id]">
+                    <div class="card">
+                      <div class="card-body">
+                        <p>{{standard.name}}</p>
+                        <span [hidden]="standardModel[standard.id].scale_value_id == standardScale.scale_values[0].id || standardModel[standard.id].scale_value_id == standardScale.scale_values[1].id">
+                          <input id="ion-slider-standard{{standard.id}}" tabindex="-1" readonly="">                          
+                          <!-- <input type="range" list="standardSteplist" class="slider-width100" min="{{standardScale.scale_values[1].id}}" max="{{standardScale.scale_values[standardScale.scale_values.length-1].id}}" step="1" [ngModel]="standardModel[standard.id] ? standardModel[standard.id] : setDefaultStandard(standard.id)" (ngModelChange)="standardModel[standard.id] = $event"> -->
+                          <br>
+                          <strong [style.color]="standardScaleValueNameMap[standardModel[standard.id].scale_value_id].color" 
+                                  *ngIf="standardScaleValueNameMap && standardScaleValueNameMap[standardModel[standard.id].scale_value_id]">
+                            {{ standardScaleValueNameMap[standardModel[standard.id].scale_value_id].name}}
+                          </strong>
+                        </span>
+                        <!-- <div class="checkbox pull-right">
+                          <label for="notAssessedCheckBoxStan{{standard.id}}">
+                            <input id="notAssessedCheckBoxStan{{standard.id}}" name="notAssessedCheckBoxStan{{standard.id}}" type="checkbox" [ngModel]="standardModel[standard.id].scale_value_id == standardScale.scale_values[0].id? true: false"
+                              (ngModelChange)="$event ? standardModel[standard.id].scale_value_id = standardScale.scale_values[0].id : standardModel[standard.id].scale_value_id
+                                                      = defaultStandardScaleValue"> {{ standardScale.scale_values[0].name }}
+                          </label>
+                        </div> -->
+                        <div class="checkbox pull-right">
+                          <label for="checkboxStan{{standard.id}}">
+                            <input id="checkboxStan{{standard.id}}" name="checkboxStan{{standard.id}}" type="checkbox" 
+                              [ngModel]="standardModel[standard.id].scale_value_id == standardScale.scale_values[1].id? true: false" 
+                              (ngModelChange)="$event ? standardModel[standard.id].scale_value_id = standardScale.scale_values[1].id : standardModel[standard.id].scale_value_id
+                              = defaultStandardScaleValue"> 
+                                {{ standardScale.scale_values[1].name }}
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+            <div class="card-body" *ngIf="standards.length == 0">
+              <h6>No standards found.</h6>
+            </div>
+          </div>
+          
+          <div class="card" *ngIf="impacts">
+            <div class = "card-header">
+              <strong>{{impactTitle}}</strong>
+              <span class="badge badge-pill badge-primary float-right" (click)="impactRubric.show()">View Rubric</span>
+            </div>
+            
+            <div class="card-body" *ngIf="impacts.length !== 0">
+              <div class="card" *ngFor="let impactCategory of impactCategories">
+                <div class="card-header">
+                  <h6>{{impactCategory.name}}</h6>
+                </div>
+                <div class="card-body" *ngFor="let impact of impacts[impactCategory.id]">
+                  <div class = "card">
+                    <div class = "card-body">
+                      <p>{{impact.name}}</p>
+                      <span [hidden]="impactModel[impact.id].scale_value_id == impactScale.scale_values[0].id || impactModel[impact.id].scale_value_id == impactScale.scale_values[1].id">
+                        <input id="ion-slider-impact{{impact.id}}" tabindex="-1" readonly="">
+                        <!-- <input type="range" class="slider-width100" list="impactSteplist" min="{{impactScale.scale_values[1].id}}" max="{{impactScale.scale_values[impactScale.scale_values.length-1].id}}" step="1" [ngModel]="impactModel[impact.id] ? impactModel[impact.id] : setDefaultImpact(impact.id)" (ngModelChange)="impactModel[impact.id]
+                        = $event"> -->
+                        <br>
+                        <strong [style.color]="impactScaleValueNameMap[impactModel[impact.id].scale_value_id].color" 
+                                *ngIf="impactScaleValueNameMap && impactScaleValueNameMap[impactModel[impact.id].scale_value_id]">
+                          <!-- {{ scaleValueName(impactScale.scale_values, impactModel[impact.id].scale_value_id)}} -->
+                          {{ impactScaleValueNameMap[impactModel[impact.id].scale_value_id].name}}
+                        </strong>
+                        <!-- <strong *ngIf="impactModel[impact.id]">{{scaleValueName(impactScale.scale_values, impactModel[impact.id].scale_value_id)}}</strong> -->
+                      </span>
+                      <!-- <div class="checkbox pull-right">
+                        <label for="notAssessedCheckboxImp{{impact.id}}">
+                          <input id="notAssessedCheckboxImp{{impact.id}}" name="notAssessedCheckboxImp{{impact.id}}" type="checkbox" [ngModel]="impactModel[impact.id].scale_value_id == impactScale.scale_values[0].id? true: false"
+                            (ngModelChange)="$event ? impactModel[impact.id].scale_value_id = impactScale.scale_values[0].id : impactModel[impact.id].scale_value_id = defaultImpactScaleValue"> 
+                            {{ impactScale.scale_values[0].name }}
+                        </label>
+                      </div> -->
+                      <div class="checkbox pull-right">
+                        <label for="checkboxImp{{impact.id}}">
+                          <input id="checkboxImp{{impact.id}}" name="checkboxImp{{impact.id}}" type="checkbox" 
+                              [ngModel]="impactModel[impact.id].scale_value_id == impactScale.scale_values[1].id? true: false" 
+                              (ngModelChange)="$event ? impactModel[impact.id].scale_value_id = impactScale.scale_values[1].id : impactModel[impact.id].scale_value_id = defaultImpactScaleValue"> 
+                              {{ impactScale.scale_values[1].name }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body" *ngIf="impacts.length == 0">
+              <h6>No impacts found.</h6>
+            </div>
+          </div>
+          <!-- Impact card ends here-->
+        </div>
+          <!-- .col-md-4 central div ends here-->
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-header">
+              <strong>COMMENTS</strong>
+            </div>
+            <div class="card-body">
+              <form action="" class="form-horizontal" enctype="multipart/form-data" method="post">
+                <textarea class="form-control" id="comment" name="comment" [(ngModel)]="comments" placeholder="Enter your comments for the student here..."
+                rows="9" (focusout)="beforeSave(0)"></textarea>
+              </form>
+            </div>
+          </div>
+          <div class="card">
+            <button class="btn btn-success btn-block" (click)="beforeSave(0)"><strong>Save</strong></button>
+            <button *ngIf="assessment.evaluation_feedbacks.length == 0 || !assessment.evaluation_feedbacks[0].is_completed" class="btn btn-warning btn-block" (click)="beforeSave(1)">
+              <strong>Mark Complete</strong>
+            </button>
+            <button *ngIf="assessment.evaluation_feedbacks.length != 0 && assessment.evaluation_feedbacks[0].is_completed" class="btn btn-success btn-block" disabled="disabled">
+              <strong>Completed</strong>
+              <i class="fa fa-check-circle fa-lg" style="color:#fff"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
+
+<!-- impact rubric modal -->
+<div bsModal #impactRubric="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <strong class="modal-title pull-left">Feedback {{impactTitle}} Rubric</strong>
+        <button type="button" class="close pull-right" (click)="impactRubric.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center" *ngIf="impactScale">
+          <h4>{{impactScale.name}}</h4>
+        </div>
+        <ng-container *ngIf="impactScale && !impactScale.image_url">
+          <span *ngIf="impactScale.scale_values && impactScale.scale_values.length !== 0">
+            <div class="col-md-12" *ngFor="let scaleValue of impactScale.scale_values">
+              <h6>{{scaleValue.name}}</h6>
+              <p>{{scaleValue.description}}</p>
+            </div>
+          </span>
+        </ng-container>
+        <ng-container *ngIf="impactScale && impactScale.image_url">
+          <img src="{{impactScale.image_url}}" style="max-height:100%; max-width: 100%">
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Standard Rubric -->
+<div bsModal #standardRubric="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <strong class="modal-title pull-left">Feedback Standard Rubric</strong>
+        <button type="button" class="close pull-right" (click)="standardRubric.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center" *ngIf="impactScale">
+          <h4>{{standardScale.name}}</h4>
+        </div>
+        <ng-container *ngIf="standardScale && !standardScale.image_url">
+          <span *ngIf="standardScale.scale_values && standardScale.scale_values.length !== 0">
+            <div class="col-md-12" *ngFor="let scaleValue of standardScale.scale_values">
+              <h6>{{scaleValue.name}}</h6>
+              <p>{{scaleValue.description}}</p>
+            </div>
+          </span>
+        </ng-container>
+        <ng-container *ngIf="standardScale && standardScale.image_url">
+          <img src="{{standardScale.image_url}}" style="max-height:100%; max-width: 100%">
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Steplist Impact-->
+<datalist *ngIf="impactScale && impactScale.scale_values && impactScale.scale_values.length !== 0" id="impactSteplist">
+  <option *ngFor="let value of impactScale.scale_values">{{value.id}}</option>
+</datalist>
+
+<!-- Steplist Standard-->
+<datalist *ngIf="standardScale && standardScale.scale_values && standardScale.scale_values.length !== 0" id="standardSteplist">
+  <option *ngFor="let value of standardScale.scale_values">{{value.id}}</option>
+</datalist>

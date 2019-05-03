@@ -1,0 +1,85 @@
+<div class="app-body">
+  <div class="sidebar content-sidebar">
+    <nav class="sidebar-nav content-sidebar-nav">
+      <ul class="nav content-nav">
+      <li class="nav-title">
+        <!-- <span style="float:left;color:#4D5462;" [routerLink]="['/analytics']">Back to Analytics: </span> -->
+        <button class="btn btn-primary" [routerLink]="['/analytics']">
+          <i class="fa fa-toggle-left" style="font-size:20px"></i> Back to Analytics</button>
+        <!-- <span style="float:right;color:#00A9B6;text-transform:none;">Create New Course</span> -->
+      
+      </li>
+      <h5 style="text-align:center;color:#4D5462;">Students</h5>
+
+        <li class="divider"></li>
+        <span *ngIf="students && students.length !== 0">
+          <li class="nav-title" *ngFor="let student of students">
+            <div class="row" routerLinkActive="active" style="cursor: pointer;" [routerLink]="['/analytics/circumplex',student.section.term_id ,student.section_id,student.student_id]">
+              <div class="col-4" style="padding-left: 0px; padding-right: 0px;">
+                <img alt="admin@bootstrapmaster.com" class="col-11 img-avatar" src="http://ts.twinspark.co/dev/learningboard/img/default-img.jpeg">
+              </div>
+              <div class="col-8">
+                <span style="color:black;">{{student.student.first_name}} {{student.student.middle_name}} {{student.student.last_name}}</span>
+                <br>
+              </div>
+              <!-- <small>feedback in process</small> -->
+            </div>
+          </li>
+        </span>
+      </ul>
+    </nav>
+  </div>
+  <main class="main content-main ">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-body">
+              <app-select-student></app-select-student>
+              <!-- <div *ngIf="showBanner" style="background-color:white; height:93vh; max-width:100%;">
+                <div class="container-fluid text-center" style="padding-top: 320px;">
+                  <h1>
+                    Select a Student from the list!
+                  </h1>
+                </div>
+              </div> -->
+            </div>
+          </div>
+          <div class="spinner" *ngIf="spinnerEnabled"></div>
+          <div class = "card" *ngIf="!spinnerEnabled">
+            <div class = "card-header">
+              <strong>Standards</strong>
+            </div>
+            <div class = "card-body">
+              <div *ngIf = "terms && terms.length > 0" class = "pull-right">
+                <ng-select [multiple]="false" [items]="terms" (data)="refreshValue($event)"
+                 placeholder="Select Term"></ng-select>
+              </div>
+              <app-polar-chart *ngIf = "termId" [termId] = termId [sectionId] = sectionId [studentId] = studentId [type] = "'Standards'" [showButtonFlag] = "true" [chartType] = "'Common'" [title] = "'Standards'"></app-polar-chart>  
+              <!-- <br> <br>         
+              <app-polar-chart *ngIf="termId" [termId]= termId [sectionId]= sectionId [studentId]= studentId [type]="'Impacts'" [showButtonFlag]="false"
+                [chartType]="'Common'" [title] = "'Impacts'"></app-polar-chart> -->
+              <div *ngIf = "!termId">Please select campus and get the terms!</div>
+            </div>
+          </div>
+          <div class="card" *ngIf="!spinnerEnabled">
+            <div class="card-header">
+              <strong>Impacts</strong>
+            </div>
+            <div class="card-body">
+              <div *ngIf="terms && terms.length > 0" class="pull-right">
+                <ng-select [multiple]="false" [items]="terms" (data)="refreshValue($event)" placeholder="Select Term"></ng-select>
+              </div>
+              <!-- <app-polar-chart *ngIf = "termId" [termId] = termId [sectionId] = sectionId [studentId] = studentId [type] = "'Standards'" [showButtonFlag] = "true" [chartType] = "'Common'" [title] = "'Standards'"></app-polar-chart>   -->
+              <!-- <br>
+              <br> -->
+              <app-polar-chart *ngIf="termId" [termId]= termId [sectionId]= sectionId [studentId]= studentId [type]="'Impacts'" [showButtonFlag]="false"
+                [chartType]="'Common'" [title]="'Impacts'"></app-polar-chart>
+            <div *ngIf="!termId">Please select campus get the terms!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

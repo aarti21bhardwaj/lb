@@ -1,0 +1,208 @@
+
+<!-- Teacher nav bar -->
+<header class="app-header navbar" *ngIf="user_info && (user_info.role == 'Teacher' || user_info.role == 'Admin' || user_info.role == 'School Admin')">
+  <!-- <button class="navbar-toggler d-lg-none" type="button" appMobileSidebarToggler>&#9776;</button> -->
+  <a class="navbar-brand" href="#">LearningBoard</a>
+  <span class="d-md-down-none" style="color: #fff;margin-top: -6px;font-size: xx-large;padding-left: 5px;padding-right: 5px;">|</span>
+  <span navbar-toggler d-lg-none>
+    <ul class="nav navbar-nav "  style="flex-direction: column;margin-top: -5px;">
+      <li class="nav-item">
+            <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                <span style="color: #fff;margin-top: -6px;font-size: 18px;padding-left: 5px;padding-right: 5px;">
+                  {{selectedTopNavOption}}
+                </span>
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" style="color: #fff; cursor:pointer; background-color:#00A9B6;">
+                <li (click)="goToRoute('teaching')">
+                  <h6>TEACHING HUB</h6>
+                </li>
+                <li (click)="goToRoute('foundation')">
+                  <h6>FOUNDATION</h6>
+                </li>
+                <li (click)="goToRoute('feedback')">
+                  <h6>FEEDBACK</h6>
+                </li>
+                <li (click)="goToRoute('analytics')">
+                  <h6>ANALYTICS</h6>
+                </li>
+                <li (click)="goToRoute('reports')">
+                  <h6>PROGRESS REPORTING</h6>
+                </li>
+                <li (click)="goToRoute('teacher-evidences')" *ngIf="user_info.role != 'Admin'">
+                  <h6>EDUCATOR PORTFOLIO</h6>
+                </li>
+                <li (click)="goToRoute('unit-browser')">
+                  <h6>UNIT BROWSER</h6>
+                </li>
+              </ul>
+            </div>
+          <!-- </div> -->
+      </li> 
+    </ul>
+  </span>
+  <ul *ngIf="user_info" class="nav navbar-nav ml-auto" style="margin-right:20px;">
+    <li class="nav-item dropdown" dropdown (onToggle)="toggled($event)">
+      <a href class="nav-link dropdown-toggle" dropdownToggle (click)="false" style="color:#fff">
+        <span class="d-md-down-none" *ngIf="user_info.name">{{ user_info.name }}</span>
+        <img *ngIf="user_info.image" src="{{user_info.image ? user_info.image : 'http://ts.twinspark.co/dev/learningboard/img/default-img.jpeg'}}" class="img-avatar" >
+      </a>
+      <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
+
+        <a class="dropdown-item" href="http://help.learningboard.co/support/home/" target="_blank">
+          <i class="fa fa-question-circle"></i> Help Desk</a>
+        <a class="dropdown-item" (click)="openModel(change)">
+        <i class="fa fa-lock"></i>Change Password</a>
+        <a *ngIf="custom_links && custom_links.attendance_form" class="dropdown-item" href="{{custom_links.attendance_form}}" target="_blank">
+          <i class="fa fa-file-text"></i>Attendance form</a>
+        <a *ngIf="custom_links && custom_links.student_form_admin && user_info.role == 'Admin'" class="dropdown-item" href="{{custom_links.student_form_admin}}" target="_blank">
+          <i class="fa fa-file-text"></i>Student Form</a>
+        <a *ngIf="custom_links && custom_links.student_form_teacher && user_info.role == 'Teacher'" class="dropdown-item" href="{{custom_links.student_form_teacher}}" target="_blank">
+          <i class="fa fa-file-text"></i>Student Form</a>
+        <a *ngIf="custom_links && custom_links.school_attendance_dashboard_admin && user_info.role == 'Admin'" class="dropdown-item" href="{{custom_links.school_attendance_dashboard_admin}}" target="_blank">
+          <i class="fa fa-tachometer"></i>School Attendance Dashboard</a>
+        <a *ngIf="custom_links && custom_links.school_attendance_dashboard_admin_n_teacher" class="dropdown-item" href="{{custom_links.school_attendance_dashboard_admin_n_teacher}}" target="_blank">
+          <i class="fa fa-tachometer"></i>Student Attendance Dashboard</a>
+        <a *ngIf = "user_info.role == 'Admin' || user_info.role == 'School Admin'" class="dropdown-item" href="{{backToAdmin}}" target="_self">
+          <i class="fa fa-chevron-circle-left"></i> Back to Admin</a>
+        <a class="dropdown-item" (click)="logout()"><i class="fa fa-sign-out"></i> Logout</a>
+      </div>
+    </li>
+  </ul>
+</header>
+<!-- Student nav bar -->
+<header class="app-header navbar" *ngIf="user_info && user_info.role == 'Student'">
+  <!-- <button class="navbar-toggler d-lg-none" type="button" appMobileSidebarToggler>&#9776;</button> -->
+  <a class="navbar-brand" href="#">LearningBoard</a>
+  <span class="d-md-down-none" style="color: #fff;margin-top: -6px;font-size: xx-large;padding-left: 5px;padding-right: 5px;">|</span>
+  <span navbar-toggler d-lg-none>
+    <ul class="nav navbar-nav " style="flex-direction: column;margin-top: -5px;">
+      <li class="nav-item">
+        <div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+            <span style="color: #fff;margin-top: -6px;font-size: 18px;padding-left: 5px;padding-right: 5px;">
+              {{selectedTopNavOption}}
+            </span>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" style="color: #fff; cursor:pointer; background-color:#00A9B6;">
+            <li (click)="goToRoute('student-dashboard')">
+              <h6>STUDENT HUB</h6>
+            </li>
+            <li (click)="goToRoute('evidences')">
+              <h6>EVIDENCE</h6>
+            </li>
+          </ul>
+        </div>
+        <!-- </div> -->
+      </li>
+    </ul>
+  </span>
+  <ul *ngIf="user_info" class="nav navbar-nav ml-auto" style="margin-right:20px;">
+    <li class="nav-item dropdown" dropdown (onToggle)="toggled($event)">
+      <a href class="nav-link dropdown-toggle" dropdownToggle (click)="false" style="color:#fff">
+        <span class="d-md-down-none" *ngIf="user_info.name">{{ user_info.name }}</span>
+        <img *ngIf="user_info.image" src="{{user_info.image ? user_info.image : 'http://ts.twinspark.co/dev/learningboard/img/default-img.jpeg'}}"
+          class="img-avatar">
+      </a>
+      <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
+
+        <a class="dropdown-item" href="http://help.learningboard.co/support/home/" target="_blank">
+          <i class="fa fa-question-circle"></i> Help Desk</a>
+        <a class="dropdown-item" (click)="openModel(change)">
+          <i class="fa fa-lock"></i>Change Password</a>
+        <a *ngIf="user_info.role == 'Admin' || user_info.role == 'School Admin'" class="dropdown-item" href="{{backToAdmin}}" target="_self">
+          <i class="fa fa-chevron-circle-left"></i> Back to Admin</a>
+        <a class="dropdown-item" (click)="logout()">
+          <i class="fa fa-sign-out"></i> Logout</a>
+      </div>
+    </li>
+  </ul>
+</header>
+
+
+<header class="app-header navbar" *ngIf="user_info && user_info.role == 'Guardian'">
+  <!-- <button class="navbar-toggler d-lg-none" type="button" appMobileSidebarToggler>&#9776;</button> -->
+  <a class="navbar-brand" href="#">LearningBoard</a>
+  <span class="d-md-down-none" style="color: #fff;margin-top: -6px;font-size: xx-large;padding-left: 5px;padding-right: 5px;">|</span>
+  <span navbar-toggler d-lg-none>
+    <ul class="nav navbar-nav " style="flex-direction: column;margin-top: -5px;">
+      <li class="nav-item">
+        <div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+            <span style="color: #fff;margin-top: -6px;font-size: 18px;padding-left: 5px;padding-right: 5px;">
+               PARENT HUB
+            </span>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" style="color: #fff; cursor:pointer; background-color:#00A9B6;">
+            <li (click)="goToRoute('parent-dashboard')">
+              <h6>PARENT HUB</h6>
+            </li>
+            <!-- <li (click)="goToRoute('evidences')">
+              <h6>CIRCUMPLEX</h6>
+            </li>
+            <li (click)="goToRoute('evidences')">
+              <h6>PROGRESS REPORT</h6>
+            </li>
+            <li (click)="goToRoute('evidences')">
+              <h6>EVIDENCES</h6>
+            </li> -->
+          </ul>
+        </div>
+        <!-- </div> -->
+      </li>
+    </ul>
+  </span>
+  <ul *ngIf="user_info" class="nav navbar-nav ml-auto" style="margin-right:20px;">
+    <li class="nav-item dropdown" dropdown (onToggle)="toggled($event)">
+      <a href class="nav-link dropdown-toggle" dropdownToggle (click)="false" style="color:#fff">
+        <span class="d-md-down-none" *ngIf="user_info.name">{{ user_info.name }}</span>
+        <img *ngIf="user_info.image" src="{{user_info.image ? user_info.image : 'http://ts.twinspark.co/dev/learningboard/img/default-img.jpeg'}}"
+          class="img-avatar">
+      </a>
+      <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
+
+        <a class="dropdown-item" href="http://help.learningboard.co/support/home/" target="_blank">
+          <i class="fa fa-question-circle"></i> Help Desk</a>
+        <a class="dropdown-item" (click)="openModel(change)">
+          <i class="fa fa-lock"></i>Change Password</a>
+        <a class="dropdown-item" (click)="logout()">
+          <i class="fa fa-sign-out"></i> Logout</a>
+      </div>
+    </li>
+  </ul>
+</header>
+     
+<ng-template #change>
+    <div class="modal-header">
+      <h4 class="modal-title">Change Password</h4>
+      <button type="button" class="close" (click)="modalRef.hide()" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form action="" class="form-horizontal" enctype="multipart/form-data" method="post">
+        <div class="form-group row">
+          <label class="col-md-3 form-control-label" for="text-input">New Password</label>
+          <div class="col-md-9">
+            <input class="form-control" [(ngModel)]="newPassword" id="text-input" name="text-input" placeholder="New Password" type="password">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 form-control-label" for="text-input">Confirm New Password</label>
+          <div class="col-md-9">
+            <input class="form-control" [(ngModel)]="confirmNewPassword" id="confirm" name="confirm" placeholder="ConfirmNewPassword"
+              type="password">
+            <span *ngIf="confirmNewPassword && confirmNewPassword == newPassword" style="color:blue" class="help-block">Password Matched</span>
+          </div>
+        </div>
+      </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Cancel</button>
+    <button type="button" [disabled] = "confirmNewPassword != newPassword" class="btn btn-primary" (click)="updatePassword(); modalRef.hide();">Save</button>
+  </div>
+</ng-template>
+<router-outlet></router-outlet>      

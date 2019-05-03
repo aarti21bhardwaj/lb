@@ -1,0 +1,58 @@
+<!-- <div class="card">
+  <div class="card-header">
+    <strong>{{title}}</strong>
+  </div>
+  <div class="card-body">
+    <div [chart]="chart"></div>
+  </div>
+</div> -->
+
+<div *ngIf = "data && data.length > 0" [chart]="chart"></div>
+<br>
+<!-- <div>
+  <button type="button" class="btn btn-primary pull-right" (click)="viewOtherStandards.show()">View Other Standards</button>
+</div> -->
+
+<div *ngIf = "data.length == 0">
+  <p>Insufficient Data</p>
+</div>
+
+
+<!-- <div bsModal #viewOtherStandards="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <strong class="modal-title pull-left">Other Strands</strong>
+        <button type="button" class="close pull-right" (click)="viewOtherStandards.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="otherStandards && otherStandards.length !== 0" class="card">
+          <div class="card-header">
+            <strong>Other Strands</strong>
+          </div>
+          <div class="card-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Strand Name</th>
+                  <th>Standards</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let  standard of otherStandards; let i=index">
+                  <td>{{standard.name}}</td>
+                  <td>{{standard.y}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="viewOtherStandards.hide()">Close</button>
+      </div>
+    </div>
+  </div>
+</div> -->

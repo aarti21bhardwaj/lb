@@ -1,0 +1,31 @@
+<div class="app-body">
+  <div class="sidebar content-sidebar">
+    <nav class="sidebar-nav content-sidebar-nav">
+      <ul class="nav content-nav">
+        <li class="nav-title">
+          <!-- <span style="float:left;color:#4D5462;" [routerLink]="['/analytics']">Back to Analytics: </span> -->
+          <button class="btn btn-primary" [routerLink]="['/analytics/circumplex',termId ,sectionId,studentId]">
+            <i class="fa fa-toggle-left" style="font-size:20px"></i> Back</button>
+          <!-- <span style="float:right;color:#00A9B6;text-transform:none;">Create New Course</span> -->
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <main class="main content-main ">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">
+              <strong>Course Circumplex</strong>
+            </div>
+            <div class="card-body">
+              <app-polar-chart *ngIf="termId" [termId]= termId [sectionId]= sectionId [studentId]= studentId [courseId] = courseId [showButtonFlag]="false"
+                [chartType]="'CourseSpecific'"></app-polar-chart>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,52 @@
+<div class="spinner" *ngIf="spinnerEnabled"></div>
+<div *ngIf = "courseId && !spinnerEnabled">
+  <ol class="breadcrumb">
+    <li>
+      <div class="list-group">
+        <div class="list-group-item-action flex-column align-items-start">
+          <h5 class="mb-1">
+            <strong>COURSE MAP</strong>
+          </h5>
+        </div>
+      </div>
+      <!-- .list-group ends here  -->
+    </li>
+  </ol>
+
+    <!-- <div class="card-header">
+      <strong>COURSE MAP</strong>
+    </div> -->
+    <!-- <div class="card-body"> -->
+    <div class = "row">
+
+      <div class = "col-sm-5">
+
+        <div class="card">
+          <div class = "card-header">
+            <strong>Strand Distribution</strong>
+          </div>
+          <div class = "card-body">
+            <app-course-strand-distribution [title]="'Strand Distribution'" *ngIf="courseId" [courseId]= courseId></app-course-strand-distribution>
+          </div>
+        </div>
+      </div>
+      <div class = "col-sm-7">
+
+        <div class="card">
+          <div class="card-header">
+            <strong>Standard Usage</strong>
+          </div>
+          <div class="card-body">
+            <app-strand-usage [title]="'Standards Usage'" *ngIf="courseId" [courseId]= courseId></app-strand-usage>
+            &nbsp;
+          </div>
+        </div>
+      </div>
+    </div>
+    <app-standard-usage-table *ngIf="courseId" [courseId]= courseId></app-standard-usage-table>
+    <!-- </div> -->
+  
+<!-- .card ends here-->
+
+
+</div>

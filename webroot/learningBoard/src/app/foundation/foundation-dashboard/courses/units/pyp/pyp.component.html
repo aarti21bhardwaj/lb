@@ -1,0 +1,97 @@
+<link rel="stylesheet" [href]='sanitizer.bypassSecurityTrustResourceUrl(cssUrl)'>
+<div class="app-body">
+  <div class="sidebar content-sidebar">
+    <nav class="sidebar-nav content-sidebar-nav">
+      <ul class="nav contnet-nav">
+        <li class="nav-title">
+          <span style="float:left;color:#4D5462;" [routerLink]="['/foundation/courses',courseId]">Back to Course: </span>
+        </li>
+        <li class="divider"></li>
+        <li [ngClass]="{'active': isMetaUnitActive == true}" [routerLink]="['/foundation/courses',courseId,'units','pyp',unitId]"
+          class="nav-title">
+          <span style="float:left;color:#4D5462;">Unit Overview</span>
+        </li>
+
+        <li routerLinkActive="active" [routerLink]="['/foundation/courses',courseId,'units','pyp',unitId,'purpose']" class="nav-title">
+          <span style="float:left;color:#4D5462;">What is our purpose?</span>
+        </li>
+
+        <li routerLinkActive="active" [routerLink]="['/foundation/courses',courseId,'units','pyp',unitId,'know']" class="nav-title">
+          <span style="float:left;color:#4D5462;">How might we know?</span>
+        </li>
+
+        <li routerLinkActive="active" [routerLink]="['/foundation/courses',courseId,'units','pyp',unitId,'learn']"
+          class="nav-title">
+          <span style="float:left;color:#4D5462;">How might we learn?</span>
+        </li>
+
+        <li routerLinkActive="active" [routerLink]="['/foundation/courses',courseId,'units','pyp',unitId,'resources']"
+          class="nav-title">
+          <span style="float:left;color:#4D5462;">Resources</span>
+        </li>
+
+        <li routerLinkActive="active" [routerLink]="['/foundation/courses',courseId,'units','pyp',unitId,'reflections']"
+          class="nav-title">
+          <span style="float:left;color:#4D5462;">Reflections</span>
+        </li>
+
+      </ul>
+    </nav>
+  </div>
+  <!-- Main content -->
+  <main class="main content-main " *ngIf="!spinnerEnabled && courseDetails">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-8">
+          <router-outlet></router-outlet>
+        </div>
+        <div class="col-md-4">
+          <ol class="breadcrumb">
+            <li>
+              <div class="list-group">
+                <div class="list-group-item-action flex-column align-items-start">
+                  <h5 class="mb-1">
+                    <strong>{{courseDetails.name}}</strong>
+                  </h5>
+                </div>
+              </div>
+              <!-- .list-group ends here  -->
+            </li>
+          </ol>
+          <div *ngIf = "courseDetails" class="card">
+            <div class="card-header">
+              <strong>Unit Summary</strong>
+              <span class="pull-right">
+                <button (click) = "toggleSummary()" class="btn btn-sm btn-primary">{{summaryToggleButtonText}}</button>
+              </span>
+            </div>
+            <div *ngIf = "unitData" class="breadcrumb">
+              <strong>{{unitData.name}}</strong>
+            </div>
+            <div *ngIf="!hideSummary" class="card-body">
+              <app-unit-summary *ngIf="centralIdeaId" [isExpanded] = summaryExpanded [courseId]= courseId [unitId]= unitId [categoryId]= centralIdeaId
+                title="Central Idea" type="SpecificContent" isExpanded = "true" ></app-unit-summary>
+                <!-- key concepts -->
+              <app-common-content-unit-summary *ngIf="keyConceptId" [courseId]= courseId [unitId]= unitId [categoryId]= keyConceptId [commonContents]=
+                 keyConcepts></app-common-content-unit-summary>
+              <app-unit-summary *ngIf="relatedConceptId" [isExpanded] = summaryExpanded [courseId]= courseId [unitId]= unitId [categoryId]= relatedConceptId title="Related concepts"
+                type="SpecificContent"></app-unit-summary>
+                <app-unit-summary *ngIf="lineOfInqId" [isExpanded] = summaryExpanded [courseId]= courseId [unitId]= unitId [categoryId]= lineOfInqId title="Line Of Inquiry"
+                type="SpecificContent"></app-unit-summary>
+              <app-unit-summary [isExpanded] = summaryExpanded [courseId]= courseId [unitId]= unitId title="Standards" type="Standard"></app-unit-summary>
+              <app-unit-summary [isExpanded] = summaryExpanded [courseId]= courseId [unitId]= unitId title="Educational Aims" type="Impact"></app-unit-summary>
+              
+              <app-unit-summary [isExpanded] = summaryExpanded  [courseId]= courseId [unitId]= unitId title="Assessments FOR Learning" assessmentTypeId="1" type="Assessment"></app-unit-summary>
+              <app-unit-summary [isExpanded] = summaryExpanded [courseId]= courseId [unitId]= unitId title="Assesments OF Learning" assessmentTypeId="2" type="Assessment"></app-unit-summary>
+              <!-- Transdeciplinary -->
+              <app-common-content-unit-summary *ngIf="transdisciplinaryId" [courseId]= courseId [unitId]= unitId [categoryId]= transdisciplinaryId [commonContents]=
+                 transdisciplinarySkills></app-common-content-unit-summary>
+                <app-common-content-unit-summary *ngIf="learnerProfileId" [courseId]= courseId [unitId]= unitId [categoryId]= learnerProfileId [commonContents]=
+                   learnerProfiles></app-common-content-unit-summary>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

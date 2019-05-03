@@ -1,0 +1,41 @@
+<!-- <router-outlet></router-outlet> -->
+<div class = "row">
+  <!-- Select campuses -->
+  <div *ngIf = "(campuses && campuses.length > 0)" class = "col-md-3">
+    <ng-select [multiple]="false" [active]="selectedCampusId" [items]="campuses" (data)="refreshValue($event, 'campuses')"
+      (selected)="selected($event, 'campuses')" (removed)="removed($event, 'campuses')" placeholder="Select Campus"></ng-select>
+  </div>
+  <!-- Select Division -->
+  <div *ngIf = "divisions && divisions.length > 0" class="col-md-2">
+    <ng-select [multiple]="false" [active]="selectedDivisionId" [items]="divisions" (data)="refreshValue($event, 'divisions')" (selected)="selected($event, 'divisions')"
+      (removed)="removed($event, 'divisions')" placeholder="Select Division"></ng-select>
+  </div>
+  <!-- Select Term -->
+  <div *ngIf = "terms && terms.length > 0" class="col-md-2">
+    <ng-select [multiple]="false" [active]="selectedTermId" [items]="terms" (data)="refreshValue($event, 'terms')" (selected)="selected($event, 'terms')"
+    (removed)="removed($event, 'terms')" placeholder="Select Term"></ng-select>
+  </div>
+ 
+  <!-- Select Course-->
+  <div *ngIf = "courses && courses.length > 0" class="col-md-2">
+    <ng-select [multiple]="false" [active]="selectedCourseId" [items]="courses" (data)="refreshValue($event, 'courses')" (selected)="selected($event, 'courses')"
+      (removed)="removed($event, 'courses')" placeholder="Select Course"></ng-select>
+  </div>
+  <div *ngIf="courses == null && divisions.length > 0 && campuses.length > 0 && terms.length > 0 && termId" class="col-md-4">
+    <strong>No course available for this term.</strong>
+  </div>
+  <div *ngIf="terms && terms.length == 0 && divisions.length > 0 && campuses.length > 0 && divisionId" class="col-md-4">
+    <strong>No term is active for this division.</strong>
+  </div>
+  <!-- Select  section-->
+  <div *ngIf = "sections && sections.length > 0" class="col-md-2">
+    <ng-select [multiple]="false" [active]="selectedSectionId" [items]="sections" (data)="refreshValue($event, 'sections')" (selected)="selected($event, 'sections')"
+      (removed)="removed($event, 'sections')" placeholder="Select Section"></ng-select>
+  </div>
+  <div *ngIf="noSections" class="col-md-3">
+    <strong>
+     No sections available for <br />this course.
+    </strong>
+  </div>
+</div>
+<!-- <router-outlet></router-outlet> -->

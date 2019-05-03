@@ -1,0 +1,144 @@
+<div class="card">
+  <div class="card-header">
+    RESOURCES
+    <button class="pull-right btn btn-primary customdisable" (click)="showResource()" *ngIf="!collapseBtn">ADD</button>
+    <button class="pull-right btn btn-primary" (click)="hideResource()" *ngIf="collapseBtn" >COLLAPSE</button>
+  </div>
+  <div class="card-body">
+    <div *ngIf="resource" class="card">
+      <div class="card-body">
+        <div class="form-group row">
+          <div class="col-md-3">
+            <small>
+              <label class="form-control-label" for="text-input">RESOURCE NAME</label>
+            </small>
+          </div>
+          <div class="col-md-9">
+            <input class="form-control" id="resource" name="resource" [(ngModel)]="resource_name" placeholder="Provide a name for the resource"
+              type="text">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-md-3">
+            <small>
+              <label class="form-control-label" for="text-input">RESOURCE TYPE</label>
+            </small>
+          </div>
+          <div class="col-md-9">
+            <label class="radio-inline" for="inline-radio1">
+              <input id="inline-radio1" name="inline-radios" [(ngModel)]="resourceType" type="radio" value="link" (click) = "typeOfResource('link')">Link
+            </label>
+            <label class="radio-inline" for="inline-radio2">
+              <input id="inline-radio2" name="inline-radios" [(ngModel)]="resourceType" type="radio" value="file" (click) = "typeOfResource('file')"> File
+            </label>
+            <label class="radio-inline" for="inline-radio3">
+              <input id="inline-radio3" name="inline-radios" [(ngModel)]="resourceType" type="radio" value="description" (click) = "typeOfResource('description')"> Enter Text
+            </label>
+          </div>
+        </div>
+        <!-- IF link is selected -->
+        <div *ngIf="resourceType == 'link'" class="form-group row">
+          <div class="col-md-12">
+            <input class="form-control" [(ngModel)]="url" id="resource_link" name="resource_link" placeholder="Enter resource link" type="text">
+          </div>
+        </div>
+        <!-- If File is selected -->
+        <div *ngIf="resourceType == 'file'" class="form-group row">
+          <div class="col-md-12">
+            <input id="file-input" name="file-input" type="file" (change)="handleFileInput($event.target.files)">
+          </div>
+        </div>
+        <!-- If Text is selected -->
+        <div *ngIf="resourceType == 'description'" class="form-group row">
+          <div class="col-md-12">
+            <!-- <textarea class="form-control" [(ngModel)]="resource_description" id="resource_description" name="resource_discription" placeholder="Description" -->
+              <!-- rows="9"></textarea> -->
+            <div id="froalaInput" name="froalaInput" [froalaEditor]="editoroptions" [(froalaModel)]="resource_description"></div>
+            <input id="hiddenInput" name="hiddenInput" type="hidden" required [(ngModel)]="resource_description" />
+          </div>
+        </div>
+        <button *ngIf="resourceType" [disabled]="disableSubmit()" (click)="saveResource()" class="btn btn-primary customdisable">Save Resource</button>
+      </div>
+    </div>
+
+    <!-- <div *ngIf="resources && resources.length !== 0">
+      <accordion>
+        <accordion-group *ngFor="let resources_source of JSObject.keys(resources)">
+          <div accordion-heading class="clearfix" style="cursor:pointer;">
+            <h6>
+              <strong>{{resources_source}}</strong>
+              <span class="badge badge-pill badge-success float-right">{{resources[resources_source].length}}</span>
+            </h6>
+          </div>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Resource Name</th>
+                <th>Resource</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let resource of resources[resources_source]; let i=index">
+                <td>{{ resource.name }}</td>
+                <td *ngIf="resource.resource_type === 'link'"><a target="_new" href="https://{{resource.url}}" class="btn btn-primary" >Open Link</a></td>
+                <td *ngIf="resource.resource_type === 'description'" [innerHTML]="resource.description"></td>
+                <td *ngIf="resource.resource_type === 'file'"><a target="_new" href="{{evnEndpoint}}{{resource.file_path}}{{ resource.file_name }}" class="btn btn-success">Download File</a></td>
+                <td>
+                  <button type="button" (click)="openEdit(resource.id, resources_source)" class="btn btn-warning btn-sm icon"><i class="fa fa-edit"></i></button>
+                  <button type="button" (click)="deleteResource(resource.id)" class="btn btn-danger btn-sm icon"><i class="fa fa-trash-o"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </accordion-group>
+      </accordion>
+    </div> -->
+
+    <div *ngIf="resources && resources.length !== 0">
+        <div class="card" *ngFor="let resources_source of JSObject.keys(resources)">
+          <div class="card-header" style="cursor:pointer;">
+            <h6>
+              <strong>{{resources_source}}</strong>
+              <span class="badge badge-pill badge-success float-right">{{resources[resources_source].length}}</span>
+            </h6>
+          </div>
+          <div class="card-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Resource Name</th>
+                  <th>Resource</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let resource of resources[resources_source]; let i=index">
+                  <td>{{ resource.name }}</td>
+                  <!-- <td *ngIf="resource.resource_type === 'link'">
+                    <a target="_new" href="https://{{resource.url}}" class="btn btn-primary">Open Link</a>
+                  </td> -->
+                  <td *ngIf="resource.resource_type === 'link'">
+                    <button class = "btn btn-primary" (click) = "openLink(resource)">Open Link</button>
+                  </td>
+                  <td *ngIf="resource.resource_type === 'description'" [innerHTML]="resource.description"></td>
+                  <td *ngIf="resource.resource_type === 'file'">
+                    <a target="_new" href="{{evnEndpoint}}{{resource.file_path}}/{{ resource.file_name }}" class="btn btn-success">Download File</a>
+                  </td>
+                  <td>
+                    <button type="button" (click)="openEdit(resource.id, resources_source)" class="btn btn-warning btn-sm icon">
+                      <i class="fa fa-edit"></i>
+                    </button>
+                    <button type="button" (click)="deleteResource(resource.id)" class="btn btn-danger btn-sm icon customdisable">
+                      <i class="fa fa-trash-o"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+
+  </div>
+</div>

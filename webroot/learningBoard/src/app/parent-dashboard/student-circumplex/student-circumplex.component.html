@@ -1,0 +1,52 @@
+<div class="app-body">
+  <div class="sidebar content-sidebar">
+    <nav class="sidebar-nav content-sidebar-nav">
+      <ul class="nav content-nav">
+        <li class="nav-title">
+          <!-- <span style="float:left;color:#4D5462;" [routerLink]="['/analytics']">Back to Analytics: </span> -->
+          <button class="btn btn-primary" [routerLink]="['/parent-dashboard']">
+            <i class="fa fa-toggle-left" style="font-size:20px"></i> Back to Dashboard</button>
+          <!-- <span style="float:right;color:#00A9B6;text-transform:none;">Create New Course</span> -->
+
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <main class="main content-main ">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="spinner" *ngIf="spinnerEnabled"></div>
+          <div class="card" *ngIf="!spinnerEnabled">
+            <div class="card-header">
+              <strong>Standards</strong>
+            </div>
+            <div class="card-body">
+              <app-polar-chart *ngIf="termId" [termId]= termId [sectionId]= sectionId [studentId]= studentId [type]="'Standards'" [showButtonFlag]="true"
+                [chartType]="'Common'" [title]="'Standards'"></app-polar-chart>
+            </div>
+          </div>
+          <div class="card" *ngIf="!spinnerEnabled">
+            <div class="card-header">
+              <strong>Impacts</strong>
+            </div>
+            <div class="card-body">
+              <app-polar-chart *ngIf="termId" [termId]= termId [sectionId]= sectionId [studentId]= studentId [type]="'Impacts'" [showButtonFlag]="false"
+                [chartType]="'Common'" [title]="'Impacts'"></app-polar-chart>
+            </div>
+          </div>
+          <div class="card" *ngIf="!spinnerEnabled">
+            <div class="card-header">
+              <strong>Courses</strong>
+            </div>
+            <div class="card-body">
+              <app-polar-chart *ngIf="termId" [termId]= termId [sectionId]= sectionId [studentId]= studentId [courseId]= courseId [showButtonFlag]="false"
+                [chartType]="'CourseSpecific'"></app-polar-chart>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+

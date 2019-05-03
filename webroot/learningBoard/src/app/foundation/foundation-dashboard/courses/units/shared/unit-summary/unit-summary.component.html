@@ -1,0 +1,29 @@
+<accordion>
+  <accordion-group #group [isOpen] = "isExpanded">
+    <div accordion-heading class="clearfix">
+      <strong>{{title}}</strong>
+      <!-- <button>Expand All</button> -->
+    </div>
+    <ul *ngIf = "type == 'SpecificContent' && unitSpecificContents">
+      <li *ngFor="let content of unitSpecificContents"><span [innerHTML]="content.text | safe"></span></li>
+    </ul>
+    <ul *ngIf="type == 'Standard' && selectedStandards">
+      <li *ngFor="let standard of selectedStandards">
+        <span>{{standard.standard.name}}</span>
+        <!-- <p>{{standard.standard.name}}</p> -->
+      </li>
+    </ul>
+    <ul *ngIf="type == 'Impact' && selectedImpacts">
+      <li *ngFor="let impact of selectedImpacts">
+        <span>{{impact.impact.name}}</span>
+        <!-- <p>{{impact.impact.name}}</p> -->
+      </li>
+    </ul>
+    <ul *ngIf="type == 'Assessment' && taskList">
+        <li *ngFor="let task of taskList">
+          <span>{{task.name}}</span>
+          <!-- <p>{{standard.standard.name}}</p> -->
+        </li>
+    </ul>
+  </accordion-group>
+</accordion>

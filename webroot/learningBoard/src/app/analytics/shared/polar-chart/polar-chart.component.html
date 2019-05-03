@@ -1,0 +1,10 @@
+<!-- <div [chart]="chart"></div> -->
+    <div *ngIf = "categories" style="min-width: 600px; max-width: 600px; height: 600px; margin: 0 auto" [chart]="chart">
+    </div>
+    <ng-container *ngIf = "showButtonFlag && courseList && categories">
+        <button class = "btn btn-outline-primary"  *ngFor="let course of courseList; let i = index"  [routerLink]="['/analytics/circumplex',termId ,sectionId,studentId, course.id]"> {{course.name}}
+        </button>
+    </ng-container>
+    <div *ngIf="!categories">
+        <p>Insufficient Data</p>
+    </div>

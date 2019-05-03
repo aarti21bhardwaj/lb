@@ -1,0 +1,22 @@
+<accordion>
+    <accordion-group #group>
+      <div accordion-heading class="clearfix" >
+        <strong>{{ title }}</strong>
+      </div>
+      <button *ngIf="impacts && isCollaped" class="pull-right btn btn-primary" (click)="expandAll(tree.treeModel)">Expand All</button>
+      <button *ngIf="impacts && !isCollaped" class="pull-right btn btn-primary" (click)="collapseAll(tree.treeModel)">Collapse All</button>
+      <tree-root #tree [nodes]="impacts">
+          <ng-template #treeNodeTemplate let-node="node" let-index="index">
+            <!-- <input *ngIf="node.data.impact_category_id && node.data.is_selectable" id="standard_{{node.data.id}}" (change)="check(node, !node.data.checked)" type="checkbox" [indeterminate]="node.data.indeterminate" [checked]="node.data.checked || checkSelectedNode(node.data) "> {{ node.data.name }} -->
+            <input *ngIf="node.data.impact_category_id && node.data.is_selectable && (mode == 'highlight' || mode == 'default')" id="standard_{{node.data.id}}"
+              (change)="check(node, !node.data.checked, $event)" type="checkbox" [indeterminate]="node.data.indeterminate" [checked]="node.data.checked ||checkSelectedNode(node.data) ">
+            <span *ngIf="mode == 'highlight'" [ngClass]="(node.data.is_unit_impact == true)? 'highlight-node': '' ">{{ node.data.name }} </span>
+            <span *ngIf="mode == 'hide'" [ngClass]="(node.data.is_unit_impact == true)? 'hide-node': '' ">{{ node.data.name }} </span>
+            <span *ngIf="mode == 'default'">{{ node.data.name }} </span>
+          </ng-template>
+    </tree-root>
+    <div *ngIf = "showNoData">
+      <p>No impact found for this course !</p>
+    </div>
+    </accordion-group>
+  </accordion>

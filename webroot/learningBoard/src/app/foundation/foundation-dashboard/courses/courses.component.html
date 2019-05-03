@@ -1,0 +1,335 @@
+<!-- Main content -->
+ <main class="main content-main" *ngIf="courseDetails">
+      <div>
+        <ol class="breadcrumb">
+          <li>
+            <div class="list-group">
+              <div class=" list-group-item list-group-item-action flex-column align-items-start">
+                  <div class="row">
+                  <div class="col-7">
+                      <div class="row">
+                        <h5 class="mb-1"><strong>{{courseDetails.name}}</strong></h5>
+                      </div>
+                      <div class="row">
+                        <p class="course-desc" [innerHTML] = "courseDetails.description | safe"></p>
+                      </div>
+                  </div>
+                  <div class="col-5" style="padding-right:0px;">
+                    <div class = "row">
+                      <!-- <div style="text-align:right; margin-right:15px;">
+                        <strong>COURSE DURATION:&nbsp;</strong><span>22 Days</span>
+                      </div> -->
+                      <div class = "col-12">
+                          <!-- <button class="btn btn-outline-primary col-5" type="button">Add Unit</button> -->
+                          <button [disabled]="disableButton" class="btn btn-outline-primary" type="button" (click)="openModel(newUnit,'create')">Create New Unit</button>
+                          <button  class="btn btn-outline-primary" type="button" (click)="openModel(archive,'archive')">Archived Units</button>
+
+                           <!-- &nbsp; -->
+                          <!-- <button class="btn btn-outline-primary col-6" type="button" [hidden]="true" (click)="openModel(archive,'archive')">Archived Units</button> -->
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+            </div><!-- .list-group ends here  -->
+          </li>
+        </ol>
+        <ol class="breadcrumb">
+          <li>
+            <div *ngIf = "sections" class="list-group">
+              <div class=" list-group-item list-group-item-action flex-column align-items-start">
+                <div class="row">
+                <ng-select [items]="sections" [disabled]="isDisabled" (data)="refreshValue($event, 'teaching')" (selected)="selected($event, 'teaching')"
+                (removed)="removed($event, 'teaching')" highlightColor="#00A9B6" placeholder="Go To Teaching Hub"></ng-select>
+                   &nbsp;
+                <ng-select [items]="sections" [disabled]="isDisabled" (data)="refreshValue($event, 'feedback')" (selected)="selected($event, 'feedback')"
+                (removed)="removed($event, 'feedback')" highlightColor="#00A9B6" placeholder="Go To Feedback"></ng-select>
+                   &nbsp;
+                <ng-select [items]="sections" [disabled]="isDisabled" (data)="refreshValue($event, 'reports')" (selected)="selected($event, 'reports')"
+                (removed)="removed($event, 'reports')" highlightColor="#00A9B6" placeholder="Go To Reports"></ng-select>
+                   &nbsp;
+                <button class="btn btn-primary" [routerLink]="['/analytics/course-map',courseDetails.id]">
+                  Go To Course Map
+                </button>
+                </div>
+              </div>
+            </div>
+            <!-- .list-group ends here  -->
+          </li>
+        </ol>
+            <div class="row">
+              <div class="col-md-8">
+                <span *ngIf="courseDetails && courseDetails.units.length !== 0">
+                  <ng-container *ngFor="let unit of courseDetails.units;">
+                    <div *ngIf = "!unit.is_archived" class="card">
+                      <div class="card-header">
+                        <strong>{{ unit.name}}</strong>
+                        <!--  <span class="badge badge-pill badge-primary float-right">Duration: 8 days</span> -->
+                      </div>
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <p [innerHTML]="unit.description"></p>
+                          </div>
+                        </div>
+                        <div>
+                          <button class="btn btn-outline-primary" routerLink='units/{{unit.template.slug}}/{{unit.id}}' type="button">View Unit</button>
+                          <button class="btn btn-outline-primary" (click)="openModel(publish,'publish',unit)" type="button">Publish Unit</button>
+                          <button class="btn btn-outline-primary" (click)="openModel(copy,'copy',unit)" type="button">Copy Unit</button>
+                          <button class="btn btn-outline-primary" (click)="exportAsPdf(unit)" type="button">Export as PDF</button>
+                          <button class="btn btn-outline-primary" (click)="openModel(delete,'delete',unit)" type="button">Delete Unit</button>
+                          <button class="btn btn-outline-primary" [hidden]="true" (click)="archiveUnit(unit)" type="button">Archive Unit</button>
+                        </div>
+                      </div>
+                    </div><!-- .card ends here-->
+                  </ng-container>
+                </span>
+                <div class="card" *ngIf="courseDetails && courseDetails.units.length === 0">
+                  <div class="card-header">
+                    <strong>No Units found</strong>
+                    <!--  <span class="badge badge-pill badge-primary float-right">Duration: 8 days</span> -->
+                  </div>
+                </div>                    
+              </div><!-- .col-md-4 central div ends here-->
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-header">
+                      <h5>Totals<span class="badge badge-pill badge-primary float-right">{{courseDetails.units.length}} Units</span></h5>
+                  </div>
+                  <div class="card-body">
+                        <p *ngIf="courseDetails.performance_tasks">
+                          <strong>{{courseDetails.performance_tasks}}</strong>&nbsp;&nbsp;<small> Performance Tasks</small>
+                        </p>
+                        <p *ngIf="courseDetails.learning_experiences">
+                          <strong>{{courseDetails.learning_experiences}}</strong>&nbsp;&nbsp;<small> Learning Experiences</small>
+                        </p>
+                        <p *ngIf="courseDetails.formative_assessments">
+                          <strong>{{courseDetails.formative_assessments}}</strong>&nbsp;&nbsp;<small>{{labelFormative}}</small>
+                        </p>
+                        <p *ngIf="courseDetails.summative_assessments">
+                          <strong>{{courseDetails.summative_assessments}}</strong>&nbsp;&nbsp;<small>{{labelSummative}}</small>
+                        </p>
+                        <p *ngIf="courseDetails.reflections">
+                          <strong>{{courseDetails.reflections}}</strong>&nbsp;&nbsp;<small>Reflections</small>
+                        </p>
+                        <p *ngIf="courseDetails.resources">
+                          <strong>{{courseDetails.resources}}</strong>&nbsp;&nbsp;<small>Resources</small>
+                        </p>
+                  </div>    
+                </div>
+              
+              </div>
+        </div>
+
+        <router-outlet></router-outlet>
+      </div>
+</main> 
+
+<ng-template #publish >
+  <div class="modal-header">
+    <strong class="modal-title pull-left">Publish</strong>
+    <button type="button" class="close pull-right" (click)="modalRef.hide()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <div>
+          <tabset>
+            <tab heading="Publish" id="tab1">
+                  <div class="form-group row">
+                      <div class="col-md-3">
+                          <small>
+                            <label class="form-control-label" for="text-input">Sections</label>
+                          </small>
+                        </div>
+                    <div class="col-md-6">
+                      <small>
+                        <label class="form-control-label" for="text-input">START DATE - END DATE</label>
+                      </small>
+                    </div>
+                    <div class="col-md-3">
+                        <div id="start_date_div" class="input-group">
+                        </div>
+                      </div>
+                  </div><!-- start and end date -->
+                  <div class="form-group row" *ngFor="let section of courseDetails.sections; let i=index">
+                      <div class="col-md-3">
+                          <strong>
+                              {{ section.name}}
+                          </strong>
+                        </div>
+                    <div class="col-md-6">
+                      <div id="start_date_div" class="input-group">
+                        <input #i #drp="bsDaterangepicker"  bsDaterangepicker
+                          class="form-control" type="text" readonly />
+                        <span (click)="drp.toggle()" class="input-group-addon">
+                          <i class="fa fa-calendar"></i>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group row">
+                            <button [disabled]="disableButton" type="button" class="btn btn-primary" (click)="publishTask(section.course_id, section.id,i.value)">Publish</button>
+                          </div>
+                      </div>
+                  </div><!-- start and end date -->
+                  
+            </tab>
+            <!-- <tab (select)="alertMe()"> -->
+            <tab heading="Publish History" id="tab2">
+              <div *ngIf="publishedHistory && publishedHistory.length !== 0">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Section</th>
+                      <th>Published Date Range</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of publishedHistory; let i=index">
+                      <td>{{ data.section.name }}</td>
+                      <td>{{ data.start_date | date:'mediumDate' }} - {{ data.end_date | date:'mediumDate' }} </td>
+                      <td><button *ngIf="data.object_name === 'evaluation'" class="btn btn-outline-primary pull-right" routerLink='/feedback/{{data.section.id}}/assessment/{{data.object_identifier}}' (click)="modalRef.hide()"  type="button">Go To Feedback</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </tab>
+          </tabset>
+        </div>        
+  </div>
+</ng-template>
+
+<ng-template #newUnit >
+  <div class="modal-header">
+    <h4 class="modal-title">Add New Unit</h4>
+    <button type="button" class="close" (click)="modalRef.hide()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <form action="" class="form-horizontal" enctype="multipart/form-data" method="post">
+        <div class="form-group row">
+          <label class="col-md-3 form-control-label" for="text-input">Unit Name</label>
+          <div class="col-md-9">
+            <input class="form-control" [(ngModel)]="unitName" id="text-input" name="text-input" placeholder="Introduction to unit" type="text">
+            <span class="help-block">Provide a name for the unit</span>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 form-control-label" for="textarea-input">Unit Description</label>
+          <div class="col-md-9">
+            <textarea class="form-control" [(ngModel)]="unitDescription" id="textarea-input" name="textarea-input" placeholder="Write a short description of the unit here" rows="9"></textarea>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-md-12">
+            <small>
+              <label class="form-control-label" for="text-input">START DATE - END DATE</label>
+            </small>
+            <div id="start_date_div" class="input-group">
+              <input id="start_date"  name="start_date" readonly="readonly" #drp="bsDaterangepicker" placement="top" bsDaterangepicker [(ngModel)]="unitDateRange" class="form-control" type="text">
+              <span (click)="drp.toggle()" class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row" hidden>
+          <label class="col-md-3 form-control-label" for="select">Select Lesson Plan Type</label>
+          <div class="col-md-9">
+            <select class="form-control" [(ngModel)]="templateId" id="select" name="select">
+              <option value="0">Please select</option>
+              <!-- <option value="1">UbD</option>
+              <option value="3">PYP</option> -->
+              <option value="2">Transfer</option>
+            </select>
+          </div>
+        </div>
+      </form>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Close</button>
+    <button type="button" class="btn btn-primary" [disabled]="!unitName" (click)="saveUnit(); modalRef.hide();">Save changes</button>
+  </div>
+</ng-template>
+<ng-template #copy>
+  <div class="modal-header">
+    <h4 class="modal-title">Copy Unit</h4>
+    <button type="button" class="close" (click)="modalRef.hide()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form action="" class="form-horizontal" enctype="multipart/form-data" method="post">
+      <div class="form-group row">
+        <label class="col-md-3 form-control-label" for="text-input">Unit Name</label>
+        <div class="col-md-9">
+          <input class="form-control" [(ngModel)]="copiedUnitName" id="text-input" name="text-input" placeholder="Introduction to unit" type="text">
+          <span class="help-block">Provide a name for the unit</span>
+        </div>
+      </div>
+    </form>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Cancel</button>
+    <button type="button" class="btn btn-primary" [disabled]="!copiedUnitName" (click)="copyUnit(); modalRef.hide();">Save</button>
+  </div>
+</ng-template>
+<ng-template #delete>
+  <div class="modal-body">
+    <div style="text-align:center">
+      <button type="button" class="close" (click)="modalRef.hide()" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+        <br>
+      <i class="fa fa-question-circle fa-3x" aria-hidden="true"></i>
+      <br><br>
+     <h5>Do you really want to delete this unit?</h5>
+     <br>
+     <button type="button" class="btn btn-primary" (click)="deleteUnit(); modalRef.hide();">Yes</button>
+     <button type="button" class="btn btn-outline-primary" (click)="modalRef.hide()">No</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #archive>
+  <div class="modal-header">
+    <h4 class="modal-title">Archived Units</h4>
+    <button type="button" class="close" (click)="modalRef.hide()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ng-container>
+        <div class="form-group row">
+            <label class="col-md-4 form-control-label" for="text-input">Academic Year</label>
+            <div class="col-md-8">
+                <select class="col-md-8" (change)="filterTermsForAcademicYear($event.target.value)">
+                    <option value="0">--All--</option>
+                    <option *ngFor="let academicYear of academicYears" value={{academicYear.id}}>
+                        {{academicYear.name}}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row" *ngIf = "selectTerm">
+            <label class="col-md-4 form-control-label" for="text-input">Terms</label>
+            <div class="col-md-8">
+                <select class="col-md-8" (change)="selectedTerm($event.target.value)">
+                    <option value="0">--All--</option>
+                    <option *ngFor="let term of terms[academicYearId]" value={{term.id}}>
+                        {{term.name}} <span *ngIf = "term.division && term.division.name">  ({{term.division.name}}) </span>
+                    </option>
+                </select>
+            </div>
+        </div>
+    </ng-container>
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="getAllArchiveUnits(); modalRef.hide();">Submit</button>
+    <button type="button" class="btn btn-primary" (click)="modalRef.hide()">Close</button>
+  </div>
+</ng-template>

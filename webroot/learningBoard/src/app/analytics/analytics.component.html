@@ -1,0 +1,36 @@
+<div class="app-body">
+  <div class="sidebar content-sidebar">
+    <nav class="sidebar-nav content-sidebar-nav">
+      <ul class="nav contnet-nav">
+        <li class="nav-title">
+          <h5 style="float:left;color:#4D5462;">Analytics</h5>
+          <div style="padding-top:10px;">
+          </div>
+        </li>
+        <li class="divider"></li>
+<!--         
+        <li routerLinkActive="active" [routerLink]="['/course-map']"
+          class="nav-title">
+          <span style="float:left;color:#4D5462;">Courses</span>
+        </li> -->
+        
+        <li routerLinkActive="active" [routerLink]="['course-map']"
+          class="nav-title">
+          <span style="float:left;color:#4D5462;">Course Map</span>
+        </li>
+        <li routerLinkActive="active" [routerLink]="['progress-report']" class="nav-title">
+          <span style="float:left;color:#4D5462;">Student Progress</span>
+        </li>
+        <li routerLinkActive="active" [routerLink]="['circumplex']" class="nav-title">
+          <span style="float:left;color:#4D5462;">Circumplex</span>
+        </li>
+
+      </ul>
+    </nav>
+  </div>
+  <div class="container-fluid">
+    <!-- <app-polar-chart></app-polar-chart> -->
+  </div>
+  <!-- Main content -->
+  <!-- <router-outlet></router-outlet> -->
+</div>

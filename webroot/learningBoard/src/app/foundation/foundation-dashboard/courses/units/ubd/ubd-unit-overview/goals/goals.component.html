@@ -1,0 +1,34 @@
+<div>
+  <ol class="breadcrumb">
+    <li>
+      <div class="list-group">
+        <div class="list-group-item-action flex-column align-items-start">
+          <h5 class="mb-1">
+            <strong>UNIT GOALS</strong>
+          </h5>
+        </div>
+      </div>
+      <!-- .list-group ends here  -->
+    </li>
+  </ol>
+  <div class="card">
+    <div class="card-header">
+      <strong>UNIT GOALS</strong>
+    </div>
+    <div class="card-body">
+      <app-unit-standards [courseId]= courseId [unitId]= unitId [title]="'Standards'" [treeTitle]="'UbdStandards'"></app-unit-standards>
+      <app-unit-impacts [courseId]= courseId [unitId]= unitId [title]="impactTreeTitle" [treeTitle]="' '"></app-unit-impacts>
+      <app-add-unit-specific-component *ngIf = "transferGoalId" [courseId]= courseId [unitId]= unitId [categoryId]= transferGoalId [commonContents]= goals>
+      </app-add-unit-specific-component>
+      <app-add-unit-specific-component *ngIf = "enduringUnderstandingsId" [courseId]= courseId [unitId]= unitId [categoryId]= enduringUnderstandingsId [commonContents]= understandings>
+      </app-add-unit-specific-component>
+      <app-add-unit-specific-component *ngIf = "essentialQuestionsId" [courseId]= courseId [unitId]= unitId [categoryId]= essentialQuestionsId [commonContents]= questions>
+      </app-add-unit-specific-component>
+      <app-add-unit-specific-component *ngIf = "knowledgeId" [courseId]= courseId [unitId]= unitId [categoryId]= knowledgeId [commonContents]= knowledge>
+      </app-add-unit-specific-component>
+      <app-add-unit-specific-component *ngIf = "skillId" [courseId]= courseId [unitId]= unitId [categoryId]= skillId [commonContents]= skills>
+      </app-add-unit-specific-component>
+      
+    </div>
+  </div>
+</div>

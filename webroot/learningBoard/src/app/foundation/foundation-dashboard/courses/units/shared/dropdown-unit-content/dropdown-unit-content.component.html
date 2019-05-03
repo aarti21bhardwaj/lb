@@ -1,0 +1,28 @@
+<!-- <div *ngIf="commonContents" class="card">
+  <div class="card-header">
+    <strong>{{commonContents.meta.heading_1}}</strong>
+  </div>
+  <div class="card-body">
+    <div *ngIf="content && content.length != 0" class="form-group row">
+      <div class="col-md-12">
+        <label class="form-control-label" for="select">{{commonContents.meta.heading_2}}</label>
+        <ng-select [multiple]="true" [active]="unitCheckedData" [items]="commonContents.content_values" (data)="refreshValue($event)"
+          (selected)="selected($event)" (removed)="removed($event)" placeholder="Select Concept"></ng-select>
+      </div>
+    </div>
+  </div>
+ </div>    -->
+
+<div *ngIf="commonContents" class="form-group row">
+  <div class="col-md-8">
+    <small>
+      <label class="form-control-label" for="textarea-input">{{title}}</label>
+    </small>
+  <ng-select [multiple]="false" [active]="unitCheckedData" [items]="commonContents.content_values" (data)="refreshValue($event)"
+    (selected)="selected($event)" (removed)="removed($event)" placeholder="Select"></ng-select>
+  </div>
+  <div class = "col-md-4">
+    <br>
+    <button class = "btn btn-primary customdisable" (click) = "addContent()" style="margin-top:6px"> Add</button>
+  </div>
+</div>

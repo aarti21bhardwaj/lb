@@ -1,0 +1,93 @@
+<div class="spinner" *ngIf="spinnerEnabled"></div>
+<div *ngIf="!spinnerEnabled && unitData">
+  <ol class="breadcrumb">
+    <li>
+      <div class="list-group">
+        <div class="list-group-item-action flex-column align-items-start">
+          <h5 class="mb-1">
+            <strong>UNIT OVERVIEW</strong>
+          </h5>
+        </div>
+      </div>
+      <!-- .list-group ends here  -->
+    </li>
+  </ol>
+  <div class="card">
+    <div class="card-header">
+      <strong>META UNIT</strong>
+    </div>
+    <div class="card-body">
+      <form action="" class="form-horizontal" enctype="multipart/form-data" method="post">
+        <div class="form-group row">
+          <div class="col-md-6">
+            <small>
+              <label class="form-control-label" for="text-input">UNIT NAME</label>
+            </small>
+            <input class="form-control" id="unit_name" name="unit_name" placeholder="Provide a name for the unit" [(ngModel)]='unitData.name' type="text">
+          </div>
+          <div *ngIf="allCourses && allCourses.length != 0" class="col-md-6">
+            <small>
+              <label class="form-control-label" for="text-input">COURSES</label>
+            </small>
+            <ng-select [multiple]="true" [active]="selectedCourses" [items]="allCourses" [disabled]="isDisabled" (data)="refreshValue($event, 'courses')"
+              (selected)="selected($event, 'courses')" (removed)="removed($event, 'courses')" placeholder="Select Courses"></ng-select>
+          </div>
+        </div>
+        <div *ngIf="allUnitTypes && allUnitTypes.length != 0" class="form-group row">
+          <div class="col-md-12">
+            <small>
+              <label class="form-control-label" for="textarea-input">UNIT TYPE</label>
+            </small>
+            <ng-select [active]="selectedUnitType" [items]="allUnitTypes" [disabled]="isDisabled" (data)="refreshValue($event, 'unitType')"
+              (selected)="selected($event, 'unitType')" (removed)="removed($event, 'unitType')" placeholder="Select Unit Type"></ng-select>
+          </div>
+        </div>
+        <div *ngIf="allTeachers && allTeachers.length != 0" class="form-group row">
+          <div class="col-md-12">
+            <small>
+              <label class="form-control-label" for="textarea-input">TEAM</label>
+            </small>
+            <ng-select [multiple]="true" [active]="selectedTeachers" [items]="allTeachers" [disabled]="isDisabled" (data)="refreshValue($event, 'teachers')"
+              (selected)="selected($event, 'teachers')" (removed)="removed($event, 'teachers')" placeholder="Select Team"></ng-select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-md-12">
+            <small>
+              <label class="form-control-label" for="text-input">START DATE - END DATE</label>
+            </small>
+            <div id="start_date_div" class="input-group">
+              <input id="start_date" name="start_date" #drp="bsDaterangepicker" bsDaterangepicker class="form-control" [(ngModel)]="bsRangeValue"
+              />
+              <span (click)="drp.toggle()" class="input-group-addon customdisable">
+                <i class="fa fa-calendar customdisable"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="allTransThemes && allTransThemes.length != 0" class="form-group row">
+          <div class="col-md-12">
+            <small>
+              <label class="form-control-label" for="textarea-input">TRANSDISCIPLINARY THEME</label>
+            </small>
+            <ng-select [active]="selectedTransTheme" [items]="allTransThemes" (data)="refreshValue($event, 'transTheme')"
+              (selected)="selected($event, 'transTheme')" (removed)="removed($event, 'transTheme')" placeholder="Select Theme"></ng-select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-md-12">
+            <label class="form-control-label" for="select">DESCRIPTION</label>
+            <div id="froalaInput" name="froalaInput" [froalaEditor]="editoroptions" [(froalaModel)]="unitData.trans_disciplinary_theme.description"></div>
+            <input id="hiddenInput" name="hiddenInput" type="hidden" required [(ngModel)]="unitData.trans_disciplinary_theme.description" />
+
+            <!-- <textarea class="form-control" id="discription" name="discription" placeholder="Write a short description of the unit here"
+            rows="9" [(ngModel)]="unitData.description"></textarea> -->
+          </div>
+        </div>
+        <button class=" pull-right btn btn-primary customdisable" type="button" (click)="editUnit()">Save</button>
+
+      </form>
+    </div>
+  </div>
+</div>
+<!-- .card ends here-->

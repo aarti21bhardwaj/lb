@@ -1,0 +1,102 @@
+<div class="card-body" *ngIf="!isTree">
+  <div *ngIf="commonContent" class="form-group row">
+    <div class="col-md-12">
+      <div class="checkbox" *ngFor="let contentData of commonContent.unit_contents; let i = index;">
+        <label>
+          <input  [value]="contentData.content_value.id"
+            type="checkbox" (change)="checkedCommonContent($event, contentData.content_value, 'commonContent')" [checked]="checkCommonContent(contentData.content_value)"> {{contentData.content_value.text}}
+        </label>
+      </div>
+      <div class="checkbox" *ngFor="let content of commonContent.unit_specific_contents; let i = index;">
+        <label>
+          <input  [value]="content.id" type="checkbox" (change)="checkedSpecificContent($event, content, 'specificContent')"
+            [checked]="checkSpecificContent(content)" >
+            &nbsp; 
+            <div class="pull-right">
+              <span [innerHTML]="content.text | safe: 'html'"></span>
+            </div>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="isTree">
+<!-- <div class="card" *ngIf="assessmentId"> -->
+    <div class="card-body">
+      <div class="form-group row">
+        <div class="col-md-12">
+          <label class="form-control-label" for="text-input">Do you want add Digital Strategies ?</label>
+          <span>
+            <label class="radio-inline" for="inline-radio1">
+              <input id="inline-radio1" [(ngModel)]="isAccessible" name="inline-radios" (click)="createTask(true)" type="radio" [value] ="true">Yes
+            </label>
+            <label class="radio-inline" for="inline-radio2">
+              <input id="inline-radio2" [(ngModel)]="isAccessible" name="inline-radios" (click)="createTask(false)" type="radio" [value]="false"> No
+            </label>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body" *ngIf = "isAccessible">
+      <div class="form-group row">
+        <div class="col-md-12">
+          <div class="form-group row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <strong>{{commonContent.meta.heading_1}}</strong>
+                </div>
+                <div class="card-body">
+                  <tree-root #tree [nodes]="commonContent.content_values">
+                    <ng-template #treeNodeTemplate let-node="node" let-index="index">
+                      <input *ngIf="node.data.is_selectable" id="achievements_{{node.data.id}}" (change)="check(node, !node.data.checked, $event)" type="checkbox" [indeterminate]="node.data.indeterminate"
+                        [checked]="checkSelectedNode(node.data) "> {{ node.data.text }}
+                    </ng-template>
+                  </tree-root>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <!-- <strong>{{commonContent.meta.heading_3}}</strong> -->
+          <div class="pull-right">
+            <button class="btn btn-primary customdisable" type="button" (click)="addUnitSpecificContent()">Add</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card">
+            <div class="card-body">
+              <form action="" class="form-horizontal" enctype="multipart/form-data" method="post">
+                <div class="form-group row">
+                  <div class="col-md-12">
+                    <div id="froalaInput" name="froalaInput" [froalaEditor]="editoroptions" [(froalaModel)]="unitSpecificValue"></div>
+                    <input id="hiddenInput" name="hiddenInput" type="hidden" required [(ngModel)]="unitSpecificValue" />
+                  </div>
+                </div>
+                <button type="button" class="btn btn-primary pull-right customdisable" (click)="addUnitContent()">Save</button>
+              </form>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <li *ngFor="let specificContents of unitSpecificContents; let i = index" class="list-group-item">
+                <span class="pull-right">
+                  <span class="btn btn-warning btn-sm icon" (click)="editSpecificContent(specificContents.id)">
+                    <i class="fa fa-edit"></i>
+                  </span>
+                  <span class="btn btn-danger btn-sm icon" (click)="deleteSpecificContents(specificContents.id)">
+                    <i class="fa fa-trash customdisable"></i>
+                  </span>
+                </span>
+                <span [innerHTML]="specificContents.text | safe"></span>
+              </li>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!-- </div> -->
+</div>

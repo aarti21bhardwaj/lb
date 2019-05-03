@@ -1,0 +1,57 @@
+<accordion>
+  <accordion-group [isOpen]="true">
+    <div accordion-heading class="clearfix">
+      <strong>{{ title }}</strong>
+      
+    </div>
+     <div>
+    <p>Your selections will save automatically. success prompt will appear at the top right corner of your screen.</p>
+    <button *ngIf = "academicStandards && isCollaped" class="pull-right btn btn-primary" (click)="expandAll(tree.treeModel)">Expand All</button>
+    <button *ngIf="academicStandards && !isCollaped" class="pull-right btn btn-primary" (click)="collapseAll(tree.treeModel)">Collapse All</button>
+    </div>
+    <tree-root #tree [nodes]="academicStandards">
+      <ng-template #treeNodeTemplate let-node="node" let-index="index">
+        <input *ngIf="node.data.code && node.data.is_selectable" id="standard_{{node.data.id}}" (change)="check(node, !node.data.checked, $event)"
+          type="checkbox" [indeterminate]="node.data.indeterminate" [checked]="node.data.checked || checkSelectedNode(node.data) ">{{ node.data.name }}
+        <!-- <span [ngClass]="{'highlight-node': (node.data.checked == true)}"> </span> -->
+      </ng-template>
+    </tree-root>
+    <button class="btn btn-primary pull-right mt-2 mb-2 customdisable" (click)="showAddStandardsForm()">Add More Standards</button>
+
+     <div class="card" *ngIf="addStandardsFlag">
+      <div class="card-header"> Add Success Criteria</div>
+      <div class="card-body">
+        <div *ngIf="curriculums.length" class="form-group row">
+          <div class="col-md-12">
+            <small>
+              <label class="form-control-label">Curriculum</label>
+            </small>
+            <ng-select [items]="curriculums" (data)="refreshValue($event, 'curriculum')" [disabled]="isDisabled" (selected)="selected($event, 'curriculum')"
+              (removed)="removed($event, 'curriculum')" placeholder="Select Curriculum"></ng-select>
+          </div>
+        </div>
+        <div *ngIf="learningAreas.length" class="form-group row">
+          <div class="col-md-12">
+            <small>
+              <label class="form-control-label">Learning Area</label>
+            </small>
+            <ng-select [items]="learningAreas" [disabled]="isDisabled" (data)="refreshValue($event, 'learningArea')" placeholder="Select Learning Area"
+              (selected)="selected($event, 'learningArea')" (removed)="removed($event, 'learningArea')"></ng-select>
+    
+          </div>
+        </div>
+        <div *ngIf="grades.length" class="form-group row">
+          <div class="col-md-12">
+            <small>
+              <label class="form-control-label">Grade</label>
+            </small>
+            <ng-select [items]="grades" [disabled]="isDisabled" (selected)="selected($event, 'grades')" (removed)="removed($event, 'grades')"
+              (data)="refreshValue($event, 'grades')" placeholder="Select Grade"></ng-select>
+          </div>
+        </div>
+        <button class=" pull-right btn btn-warning customdisable" type="button" (click)="closeAddMoreStandards()">Cancel</button>       
+        <button class=" pull-right btn btn-primary customdisable" type="button" [disabled]="!learningAreaId && !gradeId" (click)="addMoreUnitStrands()">Save</button>
+      </div>
+    </div>
+  </accordion-group>
+</accordion>    

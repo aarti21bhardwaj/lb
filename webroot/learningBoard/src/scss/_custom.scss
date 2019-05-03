@@ -1,0 +1,112 @@
+.sidebar-fixed {
+    $content-sidebar-width : 250px;
+      .content-sidebar {
+        width: $content-sidebar-width!important;
+        background-color: #fff;
+        color:#000;
+      }
+      .content-sidebar-nav{
+        width: $content-sidebar-width!important;
+      }
+      .contnet-nav{
+        // width: $content-sidebar-width!important;
+        width: $content-sidebar-width!important;
+      }
+      .content-main{
+        margin-left: $content-sidebar-width!important;
+      }
+}
+select.menu-dropdown {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+    background-color: #00a9b4;
+    border-color: #00a9b4;
+    color:white;
+    padding: 5px;
+    padding-left: 0px;
+    padding-right: 0px;
+    border: 0px;
+    font-size: 18px;
+}
+.highlight-node{
+  font-weight: bold!important;
+  color:darkgreen!important;
+}
+.hide-node{
+  display: none!important;
+}
+
+/* Style the back-to-top floating button */
+.sf-back-to-top {
+    background-color: #50A1CB; /* button color */
+    color: white; /* text/arrow color */ 
+    display: block;
+    z-index: 999;
+    /* float in bottom right corner */
+    /* 20 pixels from edge */
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    /* size of button is 50 pixels*/
+    width: 50px;
+    height: 50px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; 
+    /* round button */
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+}
+
+a.sf-back-to-top {
+    font-weight: 600;
+    letter-spacing: 2px;
+    font-size: 12px;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.6;
+    padding-left: 2px;
+    padding-top: 4px;    
+}
+
+a.sf-back-to-top .arrow:before {
+    content: "\e02d";
+    font-family: 'squarespace-ui-font';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 1;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    content: "\e02d";
+    text-align: center;
+    display: block;
+    vertical-align: middle;
+    transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    cursor: pointer;
+    margin-left: -4px;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+}
+.dropdown-menu li:hover {
+    outline-style: dashed;
+    outline-color: #2D3840;
+}
